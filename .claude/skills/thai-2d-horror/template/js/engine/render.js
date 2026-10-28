@@ -17,8 +17,19 @@ export const Renderer = {
     const g = vx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, W * 0.62);
     g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.6)'); vx.fillStyle = g; vx.fillRect(0, 0, W, H); this.vign = v;
     this.drops = Array.from({ length: 170 }, () => ({ x: Math.random() * W, y: Math.random() * H, s: 0.6 + Math.random() * 0.8 }));
-    // optional painted backgrounds: assets/bg/manifest.json -> ["road", "sala", ...] (assets/bg/<id>.jpg)
-    fetch('assets/bg/manifest.json').then((r) => (r.ok ? r.json() : [])).then((ids) => ids.forEach((id) => this.overrides.add(id))).catch(() => {});
+    // optional painted backgrounds: assets/bg/manifest.json lists file names, e.g. ["road_1.jpg", "road_2.jpg", "p3.jpg"]
+    fetch('assets/bg/manifest.json').then((r) => (r.ok ? r.json() : [])).then((files) => files.forEach((f) => this.overrides.add(f))).catch(() => {});
+  },
+
+  // A room image is either one wide file <name>.jpg/png, or 960-unit panels <name>_1.jpg, <name>_2.jpg … left→right.
+  paintOverride(x, room) {
+    const name = room.variant ? `${room.id}_${room.variant}` : room.id, have = (f) => this.overrides.has(f);
+    const one = ['jpg', 'png', 'webp'].map((e) => `${name}.${e}`).find(have);
+    if (one) { const img = new Image(); img.onload = () => x.drawImage(img, 0, 0, room.w, H); img.src = `assets/bg/${one}`; return; }
+    for (let n = 1; n <= Math.ceil(room.w / W); n++) {
+      const f = ['jpg', 'png', 'webp'].map((e) => `${name}_${n}.${e}`).find(have); if (!f) continue;
+      const img = new Image(); img.onload = () => x.drawImage(img, (n - 1) * W, 0, W, H); img.src = `assets/bg/${f}`;
+    }
   },
 
   buildBackdrop(room) {
@@ -28,9 +39,7 @@ export const Renderer = {
     const c = document.createElement('canvas'); c.width = room.w; c.height = H;
     const x = c.getContext('2d'); room.paint(x, room.w);
     P.grain(x, 0, 0, room.w, H, 0.08);
-    if (this.overrides.has(room.id)) {
-      const img = new Image(); img.onload = () => { x.drawImage(img, 0, 0, room.w, H); }; img.src = `assets/bg/${room.id}.jpg`;
-    }
+    this.paintOverride(x, room);
     this.bg = c; this.bgKey = key;
   },
 

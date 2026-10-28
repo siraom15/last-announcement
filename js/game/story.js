@@ -14,9 +14,25 @@ const P = () => G.player;
 const T = () => G.teacher;
 
 // ── primitives ──────────────────────────────────────────────────────
+// Which portrait (character + expression) a line shows. Disembodied PA/radio voices show none.
+function portraitOf(id, L) {
+  if (L.fx === 'radio' || (L.fx === 'pa' && L.v !== 'pakin')) return null;
+  const char = L.v === 'teacher' ? (id.startsWith('EC_') ? 'ratree' : 'teacher') : ['pakin', 'daow', 'mom'].includes(L.v) ? L.v : null;
+  if (!char) return null;
+  const tg = L.tag || '';
+  const fake = char === 'daow' && ['nameless', 'ghost', 'whisper', 'muffled'].includes(L.fx);
+  const expr = fake && L.fx === 'nameless' ? 'eerie'
+    : /scared|nervous|shocked|panick/.test(tg) ? 'scared'
+    : /cry|sob|sad|tear|breaking|hurt|pleading/.test(tg) ? 'sad'
+    : /menacing|cold|distorted|many voices|hollow|eerie/.test(tg) ? 'eerie'
+    : /smil|happy|warm|relieved/.test(tg) ? 'happy' : 'neutral';
+  const mode = L.fx === 'tape' ? 'memory' : fake ? 'warp' : '';
+  return { char, expr, mode };
+}
+
 export async function say(id, o = {}) {
   const L = LINES[id]; if (!L) return;
-  UI.sub(L.who || SPEAKERS[L.v], L.t, { fx: L.fx, dir: o.dir });
+  UI.sub(L.who || SPEAKERS[L.v], L.t, { fx: L.fx, dir: o.dir, portrait: portraitOf(id, L) });
   const v = await Audio.voice(id, L.fx);
   const dur = v ? v.dur : Math.max(1.5, L.t.length / 11);
   if (!v) Audio.voiceTexture(L.fx, dur);

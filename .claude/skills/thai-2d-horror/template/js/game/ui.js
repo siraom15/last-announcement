@@ -13,14 +13,34 @@ export const UI = {
     this.subs = $('subs'); this.who = this.subs.querySelector('.who'); this.txt = this.subs.querySelector('.txt');
     this.modalEl = $('modal'); this.useBtn = $('useBtn');
     $('stage').addEventListener('pointerdown', (e) => { if (e.target.closest('#modal,.choice,#card,#menu')) return; this.skip(); });
+    // portrait art: assets/portraits/manifest.json lists names like "pakin_neutral" (files are <name>.png)
+    this.ports = new Set();
+    fetch('assets/portraits/manifest.json').then((r) => (r.ok ? r.json() : [])).then((list) => list.forEach((n) => {
+      this.ports.add(n); new Image().src = `assets/portraits/${n}.png`;
+    })).catch(() => {});
   },
 
   // ── subtitles / cues ───────────────────────────────────────────
-  sub(who, text, { fx, dir } = {}) {
+  sub(who, text, { fx, dir, portrait } = {}) {
     this.who.textContent = (FX_ICON[fx] || '') + (who || '');
     this.txt.textContent = text; this.txt.className = 'txt' + (fx === 'whisper' || fx === 'nameless' ? ' warp' : '');
     this.subs.dataset.dir = dir || ''; this.subs.classList.add('on');
+    if (G.lock > 0) this.showPortrait(portrait);
   },
+  // Coma-style: protagonist on the left, whoever else speaks on the right; the silent one is dimmed.
+  showPortrait(p) {
+    const L = $('portL'), Rt = $('portR');
+    if (!p) { [L, Rt].forEach((e) => e.classList.contains('on') && e.classList.add('dim')); return; }
+    const name = [`${p.char}_${p.expr}`, `${p.char}_neutral`].find((n) => this.ports.has(n));
+    if (!name) return;
+    const el = p.char === 'pakin' ? L : Rt, other = el === L ? Rt : L;
+    const src = `assets/portraits/${name}.png`;
+    if (el.dataset.src !== src) { el.src = src; el.dataset.src = src; }
+    el.className = 'port on' + (p.mode ? ' ' + p.mode : '');
+    if (other.classList.contains('on')) other.classList.add('dim');
+  },
+  portraitsOff() { ['portL', 'portR'].forEach((id) => { $(id).className = 'port'; }); },
+  cinema(on) { document.body.classList.toggle('cine', on); if (!on) this.portraitsOff(); },
   clearSub() { this.subs.classList.remove('on'); },
   async waitSkippable(ms) {
     this.skipped = false;

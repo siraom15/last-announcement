@@ -144,7 +144,7 @@ const voiceText = () => (G.voiceCount == null ? 'กำลังตรวจไ�
 G.toTitle = () => {
   G.S = freshState(); G.paused = false; G.lock = 0; Teacher.reset(); G.actors = []; G.camTarget = null;
   G.enterRoom('road', 900); G.fx.fade = 0; G.fx.tension = 0; G.fx.grade = null;
-  document.body.classList.remove('playing'); UI.hud(true);
+  document.body.classList.remove('playing'); UI.hud(true); UI.cinema(false); G._cine = false;
   Audio.setAmbience({ rainOut: 0.5, drone: 0.3, wind: 0.3 });
   const save = loadSave(), m = meta(), ends = Object.keys(m.endings).sort();
   const dev = G.dev ? `<div class="dev">DEV: ${['p1_0317', 'p2_gate', 'p2_library', 'p2_archive', 'p3', 'p3_final'].map((k) => `<button data-dev="${k}">${k}</button>`).join('')}</div>` : '';
@@ -206,6 +206,7 @@ function frame(now) {
       Player.update(dt); Teacher.update(dt); Story.update(dt); Audio.update();
       UI.prompt(G.lock || G.busy ? null : nearest(), Player.hidden && !G.lock);
       UI.listening(Player.listening); Audio.listening = Player.listening;
+      const cine = G.lock > 0; if (cine !== G._cine) { G._cine = cine; UI.cinema(cine); }
       if (Player.listening && Teacher.active && G.time - (G._lc || 0) > 1.2) { G._lc = G.time; Teacher.cueDir(); }
       const tgt = G.camTarget != null ? G.camTarget : Player.x - W / 2 + Player.facing * 90;
       G.cam += (clamp(tgt, 0, Math.max(0, G.room.w - W)) - G.cam) * Math.min(1, dt * 4);

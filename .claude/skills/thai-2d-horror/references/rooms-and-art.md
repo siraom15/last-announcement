@@ -41,9 +41,13 @@ Recipe for a convincing prop: gradient body (`box`) → inner panels → a highl
 
 `drawChar(ctx, type, x, y, opts)` — types `man`, `girl`, `teacher`, `kid`, `nameless`. Options: `facing, moving, phase, crouch, armOut, hold:'light'|'book', reach (0..1), tilt, jitter, ribbon, alpha, rim, drip, h`. Add a palette entry to `PAL` for a new character. Scripted characters go in `G.actors` as `{kind, room, x, …}` (see `ACTOR_TYPE` in render.js).
 
-## Optional painted backgrounds
+## Painted art drop-in (backgrounds + portraits)
 
-Put `assets/bg/<roomId>.jpg` at exactly `room.w × 540` and add the id to `assets/bg/manifest.json`. Keep the floor line at y≈400 and leave doors where `objs` say they are. Prompt template for an image model:
+- **Backgrounds**: `assets/bg/<roomId>.jpg` (one wide image, any size with aspect w:540) **or** panels `<roomId>_1.jpg`, `_2` … each covering 960 game units (1920×1080 recommended). Variants: `<roomId>_<variant>` (e.g. `sala_morning`). List every file name in `assets/bg/manifest.json`. Wall/floor line at 74% height. Leave clocks, chalk text and mirrors blank — `dyn()` draws them.
+- **Portraits** (Coma-style dialogue): `assets/portraits/<char>_<expr>.png`, 800×1000 transparent, half-body; protagonist faces right (shown left), others face left (shown right). Expressions: neutral, scared, sad, eerie, happy — falls back to `_neutral`. List names (no extension) in `assets/portraits/manifest.json`. `portraitOf()` in story.js maps each line's voice/fx/tags to char+expression; tape lines get a sepia "memory" filter, impostor lines a glitch.
+- See `art-prompts-example.md` for a complete prompt sheet (style blocks, per-room layout with object x positions, file names).
+
+Prompt template for an image model:
 
 > 2D side-view game background, orthographic, {room description}, abandoned rural Thai {school/house} after a 2010 flood, water stain line at one third height, peeling paint, mould, night, almost no light, desaturated {act palette}, painterly realism, no people, no text, wide panorama {w}x540, floor line at 74% height
 
