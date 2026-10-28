@@ -690,7 +690,7 @@ async function finalChoice() {
     { id: 'C', t: 'เงียบ… แล้วประกาศชื่อสุดท้ายให้จบ' },
   ]);
   G.lock--;
-  Audio.duck(0.9);
+  Audio.duck(1);
   S().flags.finalChoice = c;
   return cut(() => (c === 'A' ? endingA(fake) : c === 'B' ? endingB(fake) : endingC(fake)));
 }

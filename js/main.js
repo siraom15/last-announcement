@@ -205,7 +205,7 @@ function frame(now) {
       }
       Player.update(dt); Teacher.update(dt); Story.update(dt); Audio.update();
       UI.prompt(G.lock || G.busy ? null : nearest(), Player.hidden && !G.lock);
-      UI.listening(Player.listening); Audio.duck(Player.listening ? 0.3 : 0.9, 0.2);
+      UI.listening(Player.listening); Audio.listening = Player.listening;
       if (Player.listening && Teacher.active && G.time - (G._lc || 0) > 1.2) { G._lc = G.time; Teacher.cueDir(); }
       const tgt = G.camTarget != null ? G.camTarget : Player.x - W / 2 + Player.facing * 90;
       G.cam += (clamp(tgt, 0, Math.max(0, G.room.w - W)) - G.cam) * Math.min(1, dt * 4);

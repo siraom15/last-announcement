@@ -4,6 +4,8 @@ import { G, clamp, rand } from '../game/ctx.js';
 
 let ac;
 const VOICE_DIR = 'assets/voice/';
+// Mix: ambience sits well under dialogue; voices get extra gain and duck the ambience while playing.
+const AMB_LEVEL = 0.32, VOICE_GAIN = 2.4, VOICE_DUCK = 0.3, LISTEN_DUCK = 0.35;
 
 function makeNoise(kind, sec = 3) {
   const len = ac.sampleRate * sec, b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0);
@@ -52,7 +54,7 @@ export const Audio = {
     const comp = ac.createDynamicsCompressor();
     comp.threshold.value = -16; comp.ratio.value = 4;
     chain(this.master, comp, ac.destination);
-    this.bus = { amb: gain(0.9), sfx: gain(G.settings.sfx), voice: gain(G.settings.voice) };
+    this.bus = { amb: gain(AMB_LEVEL), sfx: gain(G.settings.sfx), voice: gain(G.settings.voice * VOICE_GAIN) };
     Object.values(this.bus).forEach((b) => b.connect(this.master));
     this.noise = { white: makeNoise('white'), pink: makeNoise('pink'), brown: makeNoise('brown') };
     this.rv = {};
@@ -68,7 +70,7 @@ export const Audio = {
   suspend() { if (ac && ac.state === 'running') ac.suspend(); },
   applyVolumes() {
     if (!this.ready) return;
-    this.master.gain.value = G.settings.master; this.bus.sfx.gain.value = G.settings.sfx; this.bus.voice.gain.value = G.settings.voice;
+    this.master.gain.value = G.settings.master; this.bus.sfx.gain.value = G.settings.sfx; this.bus.voice.gain.value = G.settings.voice * VOICE_GAIN;
   },
   revIn() { return this.rv[(G.room && G.room.reverb) || 'small']; },
 
@@ -105,11 +107,15 @@ export const Audio = {
     for (const k in this.layers) this.layers[k].gain.setTargetAtTime((map[k] || 0) * (k === 'drone' ? 0.5 : 1), now, sec / 3);
     this.tickOn = !!map.tick;
   },
-  duck(level, sec = 0.3) { if (this.ready) this.bus.amb.gain.setTargetAtTime(level, ac.currentTime, sec); },
+  // scene-level ambience multiplier (1 = normal); the actual bus level is computed in update()
+  sceneDuck: 1, listening: false, voiceUntil: 0,
+  duck(level) { this.sceneDuck = Math.min(1, level); },
 
   update() {
     if (!this.ready || G.paused) return;
     const now = ac.currentTime, ten = G.fx.tension;
+    const amb = AMB_LEVEL * this.sceneDuck * (this.listening ? LISTEN_DUCK : 1) * (now < this.voiceUntil ? VOICE_DUCK : 1);
+    this.bus.amb.gain.setTargetAtTime(amb, now, now < this.voiceUntil ? 0.08 : 0.4);
     const base = (this.ambTarget.drone || 0) * 0.5;
     this.layers.drone.gain.setTargetAtTime(base + ten * 0.35, now, 0.5);
     if (this.tickOn && now > this.nextTick) { this.play('tick', { gain: 0.5 }); this.nextTick = now + 1; }
@@ -196,12 +202,12 @@ export const Audio = {
         this.hiss(t, buf.duration + 0.4, 0.035); break;
       }
       case 'radio': {
-        chain(src(), filt('bandpass', 1500, 0.9), shaper(25), gain(0.5), o({ rv: 0.05 }));
+        chain(src(), filt('bandpass', 1500, 0.9), shaper(25), gain(1), o({ rv: 0.05 }));
         this.play('static', { gain: 0.35, dur: 0.5 }); this.hiss(t, buf.duration, 0.05, 2400); break;
       }
       case 'pa': {
         const d = ac.createDelay(1); d.delayTime.value = 0.27; const fb = gain(0.32); d.connect(fb); fb.connect(d);
-        const head = chain(src(), filt('highpass', 420), filt('lowpass', 3000), shaper(18), gain(0.55));
+        const head = chain(src(), filt('highpass', 420), filt('lowpass', 3000), shaper(18), gain(1));
         head.connect(o({ rv: 0.9 })); chain(head, d, gain(0.5), o({ rv: 0.6, pan: -0.3 }));
         this.play('pop', { gain: 0.6 }); this.hiss(t, buf.duration + 0.6, 0.02, 3000); extra = 0.6; break;
       }
@@ -216,6 +222,7 @@ export const Audio = {
       case 'echo': chain(src(), o({ rv: 0.75 })); break;
       default: chain(src(), o({ rv: 0.15 }));
     }
+    this.voiceUntil = Math.max(this.voiceUntil, t + buf.duration + extra + 0.25);
     return { dur: buf.duration / (fx === 'ghost' ? 0.97 : 1) + extra, stop: () => srcs.forEach((s) => { try { s.stop(); } catch (_) { /* already stopped */ } }) };
   },
   // Texture played when a line has no recorded voice yet, so the diegetic source is still audible.
