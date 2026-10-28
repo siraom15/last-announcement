@@ -1,0 +1,14 @@
+{
+  "_readme": "Map each character to an ElevenLabs voice. Run `node tools/generate-voices.mjs --list-voices` to see ids available to your account, or pick Thai-capable voices in the Voice Library and add them to My Voices. Stability on Eleven v3: 0.0 Creative (most emotional, best for audio tags), 0.5 Natural, 1.0 Robust.",
+  "model_id": "eleven_v3",
+  "language_code": "th",
+  "voices": {
+    "pakin":     { "voice_id": "REPLACE_with_young_adult_male_voice_id", "stability": 0.5, "note": "ภาคิน 28 ปี — พูดน้อย เสียงต่ำ เหนื่อย" },
+    "daow":      { "voice_id": "REPLACE_with_child_girl_voice_id",       "stability": 0.5, "note": "ดาว 9 ขวบ — อ่อนโยน (ตัวปลอมใช้เสียงเดียวกัน แต่เกมใส่ FX)" },
+    "mom":       { "voice_id": "REPLACE_with_middle_aged_female_voice_id","stability": 0.0, "note": "แม่ — นุ่ม เศร้า ผ่านเทป" },
+    "teacher":   { "voice_id": "REPLACE_with_older_stern_female_voice_id", "stability": 0.5, "note": "ครูราตรี/ครูเวร — เย็นชา ช้า ใช้ศัพท์ครู" },
+    "announcer": { "voice_id": "REPLACE_with_flat_female_announcer_id",    "stability": 1.0, "note": "เสียงประกาศเสียงตามสาย — ราบเรียบ" },
+    "officer":   { "voice_id": "REPLACE_with_adult_male_voice_id",         "stability": 0.0, "note": "เจ้าหน้าที่อพยพ — ตะโกน ตื่นตระหนก" },
+    "child":     { "voice_id": "REPLACE_with_child_voice_id",              "stability": 0.5, "note": "เสียงเด็กใต้โต๊ะ" }
+  }
+}

@@ -1,0 +1,12 @@
+# secrets — never commit
+evenlabs_api_key.txt
+*.key
+.env
+.env.*
+
+# local / tooling
+node_modules/
+.vercel/
+.claude/settings.local.json
+.DS_Store
+Thumbs.db

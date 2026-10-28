@@ -1,0 +1,7 @@
+# only the playable game is served
+evenlabs_api_key.txt
+*.key
+.env
+.claude/
+tools/
+*.md

@@ -1,0 +1,10 @@
+{
+  "name": "เสียงตามสาย — The Last Announcement",
+  "short_name": "เสียงตามสาย",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "th"
+}
