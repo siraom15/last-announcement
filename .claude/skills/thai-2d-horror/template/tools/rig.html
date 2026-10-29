@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>rig</title><body style="margin:0;background:#3b3f47"><canvas id="c" width="1500" height="700"></canvas>
+<script type="module">
+// Pose sheet for the Pakin rig: walk cycle (8 phases), run, crouch, crouch-walk, flashlight. ?anim=1 animates.
+import { loadRig, rigReady, drawRig } from '../js/engine/rig.js';
+loadRig();
+const x = document.getElementById('c').getContext('2d');
+const anim = new URLSearchParams(location.search).has('anim');
+const poses = [
+  ...Array.from({ length: 8 }, (_, i) => ({ label: 'walk ' + i, moving: true, phase: (i / 8) * Math.PI * 2 })),
+  { label: 'idle' }, { label: 'run', moving: true, running: true, phase: 1.2 }, { label: 'crouch', crouch: true },
+  { label: 'crouch walk', crouch: true, moving: true, phase: 1 }, { label: 'flashlight', lightOn: true, hold: 'light' },
+  { label: 'walk+light', moving: true, phase: 2, lightOn: true, hold: 'light' },
+];
+function frame(t) {
+  x.fillStyle = '#3b3f47'; x.fillRect(0, 0, 1500, 700);
+  if (rigReady()) poses.forEach((p, i) => {
+    const cx = 80 + (i % 8) * 180, cy = 320 + Math.floor(i / 8) * 340;
+    x.strokeStyle = '#777'; x.beginPath(); x.moveTo(cx - 80, cy); x.lineTo(cx + 80, cy); x.stroke();
+    x.save(); x.translate(cx, cy);
+    const o = { ...p, t: t / 1000 }; if (anim && p.moving) o.phase = t / 1000 * (p.running ? 13 : 8);
+    const L = drawRig(x, 280, o); x.restore();
+    if (L && p.hold) { x.fillStyle = '#ff0'; x.fillRect(cx + L.hx - 3, cy + L.hy - 3, 6, 6); }
+    x.fillStyle = '#ddd'; x.font = '14px sans-serif'; x.fillText(p.label, cx - 40, cy + 20);
+  });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>

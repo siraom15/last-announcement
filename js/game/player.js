@@ -31,11 +31,13 @@ export const Player = {
     const room = G.room;
     if (this.x < 40) { this.x = 40; if (ax < 0 && !locked) G.onEdge('left'); }
     if (this.x > room.w - 40) { this.x = room.w - 40; if (ax > 0 && !locked) G.onEdge('right'); }
-    if (this.moving) {
-      this.phase += dt * (run ? 13 : this.crouch ? 5 : 8);
-      this.stepAcc += dt * (run ? 3.3 : this.crouch ? 1.3 : 2.1);
-      if (this.stepAcc >= 1) { this.stepAcc = 0; this.step(run); }
-    } else this.phase *= 0.85;
+    // stride eases in/out so legs settle instead of snapping; a footfall sounds each time a heel lands
+    this.stride = (this.stride || 0) + ((this.moving ? 1 : 0) - (this.stride || 0)) * Math.min(1, dt * 9);
+    if (this.stride > 0.02) {
+      const prev = Math.cos(this.phase);
+      this.phase += dt * (run ? 13 : this.crouch ? 5.5 : 8) * Math.max(0.35, this.stride);
+      if (this.moving && Math.sign(Math.cos(this.phase)) !== Math.sign(prev)) this.step(run);
+    }
   },
 
   step(run) {
@@ -47,7 +49,7 @@ export const Player = {
   draw(ctx) {
     if (this.hidden) return null;
     return drawChar(ctx, 'man', this.x, FLOOR, {
-      facing: this.facing, phase: this.phase, moving: this.moving, crouch: this.crouch,
+      facing: this.facing, phase: this.phase, moving: this.stride > 0.02, stride: this.stride, crouch: this.crouch,
       armOut: G.S.flashlight, hold: 'light', lightOn: G.S.flashlight, running: this.running,
     });
   },

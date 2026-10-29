@@ -1,6 +1,8 @@
 // Painted character sprites (assets/sprites/<name>/full.png, side view facing right).
 // One still pose per character, animated as a cut-out: stride skew below the hip, bob, sway,
 // crouch squash, plus a pre-baked rim-light and silhouette version for shadows/ghosts.
+import { loadRig, rigReady, drawRig } from './rig.js';
+
 const SRC = { man: 'pakin', girl: 'daow', kid: 'daow', teacher: 'teacher', nameless: 'nameless' };
 const HIP = { pakin: 0.5, daow: 0.56, teacher: 0.6, nameless: 0.52 };      // fraction from the top where legs start
 const HAND = { pakin: [0.1, 0.55], daow: [0.05, 0.6], teacher: [0.15, 0.55] }; // hand position (x from centre, y from top) as fractions
@@ -31,11 +33,13 @@ function load(name) {
 }
 
 export const Sprites = {
-  init() { for (const n of new Set(Object.values(SRC))) load(n); },
+  init() { for (const n of new Set(Object.values(SRC))) load(n); loadRig(); },
   ready(type) { return !!cache[SRC[type]]; },
 
   // Draws in local space (feet at 0,0, facing already applied). Returns hand position or null if not loaded.
   draw(ctx, type, o, h) {
+    // Pakin has a jointed rig (parts sheet); everyone else animates the single pose
+    if (type === 'man' && rigReady()) return drawRig(ctx, h, o);
     const name = SRC[type], sp = name && cache[name];
     if (!sp) return null;
     const k = h / sp.h, w = sp.w * k, t = o.t || 0;

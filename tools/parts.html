@@ -1,0 +1,42 @@
+<!doctype html><meta charset="utf-8"><title>parts</title><body style="background:#444;margin:0">
+<script type="module">
+// Finds the separate pieces on a transparent parts sheet (connected alpha regions) and reports their boxes.
+const src = new URLSearchParams(location.search).get('src') || '../assets/sprites/pakin/parts.png';
+const img = new Image(); img.src = src; await img.decode();
+const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; document.body.appendChild(c);
+const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+const { data, width: W, height: H } = x.getImageData(0, 0, img.width, img.height);
+const seen = new Uint8Array(W * H), boxes = [];
+const solid = (i) => data[i * 4 + 3] > 40 && !(data[i * 4] > 245 && data[i * 4 + 1] > 245 && data[i * 4 + 2] > 245);
+for (let s = 0; s < W * H; s++) {
+  if (seen[s] || !solid(s)) continue;
+  let x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0; const st = [s]; seen[s] = 1;
+  while (st.length) { const p = st.pop(), px = p % W, py = (p / W) | 0; n++; if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py;
+    for (const q of [p - 1, p + 1, p - W, p + W]) if (q >= 0 && q < W * H && !seen[q] && solid(q) && Math.abs((q % W) - px) <= 1) { seen[q] = 1; st.push(q); } }
+  if (n > 400) boxes.push({ x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1, n });
+}
+boxes.sort((a, b) => (Math.round(a.y / 300) - Math.round(b.y / 300)) || a.x - b.x);
+x.strokeStyle = 'red'; x.lineWidth = 3; x.font = 'bold 28px sans-serif'; x.fillStyle = 'red';
+boxes.forEach((b, i) => { x.strokeRect(b.x, b.y, b.w, b.h); x.fillText(i, b.x + 4, b.y + 28); });
+window.BOXES = boxes;
+// corner alpha tells whether the sheet is really transparent
+window.CORNER = [...data.slice(0, 4)];
+</script>
+<script type="module">
+// ?grid=i,j,k : draw the chosen parts enlarged with a 25px grid for picking joint positions
+const q = new URLSearchParams(location.search).get('grid');
+if (q) {
+  while (!window.BOXES) await new Promise((r) => setTimeout(r, 50));
+  const ids = q.split(',').map(Number), B = window.BOXES, img = new Image(); img.src = '../assets/sprites/pakin/parts.png'; await img.decode();
+  document.body.innerHTML = ''; document.body.style.cssText = 'margin:0;background:#556;display:flex;gap:10px;align-items:flex-start';
+  for (const i of ids) {
+    const b = B[i], c = document.createElement('canvas'); c.width = b.w + 40; c.height = b.h + 30; const x = c.getContext('2d');
+    x.drawImage(img, b.x, b.y, b.w, b.h, 30, 20, b.w, b.h);
+    x.font = '10px sans-serif';
+    for (let gx = 0; gx <= b.w; gx += 25) { x.strokeStyle = gx % 50 ? 'rgba(255,255,0,.25)' : 'rgba(255,255,0,.6)'; x.beginPath(); x.moveTo(30 + gx, 20); x.lineTo(30 + gx, 20 + b.h); x.stroke(); if (gx % 50 === 0) { x.fillStyle = '#ff0'; x.fillText(gx, 30 + gx, 12); } }
+    for (let gy = 0; gy <= b.h; gy += 25) { x.strokeStyle = gy % 50 ? 'rgba(0,255,255,.25)' : 'rgba(0,255,255,.6)'; x.beginPath(); x.moveTo(30, 20 + gy); x.lineTo(30 + b.w, 20 + gy); x.stroke(); if (gy % 50 === 0) { x.fillStyle = '#0ff'; x.fillText(gy, 2, 24 + gy); } }
+    x.fillStyle = '#fff'; x.font = 'bold 14px sans-serif'; x.fillText('#' + i, 34, 36);
+    document.body.appendChild(c);
+  }
+}
+</script>
