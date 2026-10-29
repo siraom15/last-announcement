@@ -116,6 +116,7 @@ export const UI = {
     });
   },
   titleCard(big, small = '', ms = 3800) {
+    this.portraitsOff();
     const t = $('title'); t.innerHTML = `<h1>${esc(big)}</h1><p>${esc(small)}</p>`; t.className = 'on';
     return wait(ms).then(() => { t.className = ''; return wait(800); });
   },
@@ -267,9 +268,11 @@ TAPE ────┘                 └──▶ VILLAGE</pre>
       el.oninput = el.onchange = () => { G.settings[k] = el.type === 'checkbox' ? el.checked : parseFloat(el.value); onChange && onChange(); };
     });
   },
-  ending(code, title, text) {
+  ending(code, title, text, art) {
     return new Promise((resolve) => {
-      const c = $('card'); c.className = 'on';
+      this.portraitsOff(); this.clearSub();
+      const c = $('card'); c.className = art ? 'on art' : 'on';
+      c.style.backgroundImage = art ? `linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.92) 82%), url(assets/art/${art})` : '';
       c.innerHTML = `<div><h2>${esc(code)}</h2><h1>${esc(title)}</h1><p>${esc(text)}</p><div class="btns"><button data-r="retry">ย้อนกลับไปก่อนตัดสินใจ</button><button data-r="title">กลับหน้าหลัก</button></div></div>`;
       c.querySelectorAll('button').forEach((b) => (b.onclick = () => { c.className = ''; resolve(b.dataset.r); }));
     });

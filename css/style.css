@@ -41,6 +41,9 @@ button { font-family: inherit; cursor: pointer; }
 #lbTop { top: 0; } #lbBot { bottom: 0; }
 body.cine .lb { height: 46px; }
 body.cine #objective, body.cine #cue { opacity: 0 !important; }
+/* cutscenes: tap anywhere skips a line, so the controls step aside for the portraits */
+body.cine #controls #dpad, body.cine #controls #acts { opacity: 0; pointer-events: none; transition: opacity .3s; }
+body.cine #controls #dpad button, body.cine #controls #acts button { pointer-events: none; }
 #subs .txt.warp { letter-spacing: .06em; animation: warp 2.6s infinite; }
 @keyframes warp { 0%,100% { transform: none; } 47% { transform: skewX(0); } 50% { transform: skewX(-6deg) translateX(2px); filter: blur(.4px); } 53% { transform: none; } }
 
@@ -169,6 +172,8 @@ body.cine #objective, body.cine #cue { opacity: 0 !important; }
 #card h1 { font-family: var(--serif); font-size: 44px; margin: 6px 0 14px; }
 #card p { max-width: 560px; margin: 0 auto 22px; color: #cfc6ae; font-size: 17px; line-height: 1.6; }
 #card .btns { display: flex; gap: 12px; justify-content: center; }
+#card.art { align-items: flex-end; padding-bottom: 34px; background-size: cover; background-position: center; }
+#card.art h1, #card.art p, #card.art h2 { text-shadow: 0 2px 8px #000; }
 #credits { position: absolute; inset: 0; background: #000; display: none; overflow: hidden; }
 #credits.on { display: block; }
 #credits .roll { position: absolute; left: 0; right: 0; top: 100%; text-align: center; animation: roll 28s linear forwards; font-family: var(--serif); font-size: 21px; }
@@ -177,6 +182,7 @@ body.cine #objective, body.cine #cue { opacity: 0 !important; }
 
 #menu { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: radial-gradient(ellipse at center, rgba(0,0,0,.2), rgba(0,0,0,.85)); pointer-events: auto !important; }
 #menu.on { display: flex; }
+#menu.title { background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,.55), rgba(0,0,0,.2) 55%, rgba(0,0,0,.75)), url(../assets/art/title.jpg) center / cover; }
 .titlewrap { text-align: center; }
 .titlewrap h1 { font-family: var(--serif); font-size: 76px; margin: 0; letter-spacing: .08em; text-shadow: 0 0 30px rgba(0,0,0,.9), 0 0 2px #fff3; animation: breathe 6s infinite; }
 .titlewrap h2 { font-size: 15px; letter-spacing: .6em; color: var(--dim); font-weight: 400; margin: 4px 0 16px; }
@@ -221,3 +227,6 @@ body.nohud #controls #acts, body.nohud #controls #dpad { opacity: .25; }
 #rotate b { font-size: 60px; display: block; animation: spin 2.5s infinite; }
 @keyframes spin { 50% { transform: rotate(90deg); } }
 body.portrait #rotate { display: flex; }
+
+/* full-screen layers always sit above dialogue portraits */
+#title, #credits, #card, #menu, #modal { z-index: 6; }

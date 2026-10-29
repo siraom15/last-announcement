@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\living_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-9fe020e7-5646-4e9d-aab3-534f41e3be14.png",
+  "source_size": [
+    1942,
+    809
+  ],
+  "size": [
+    2600,
+    1080
+  ],
+  "files": [
+    "living_1.jpg",
+    "living_2.jpg"
+  ],
+  "unused_right_padding": 1240,
+  "floor_y": null,
+  "align_floor": 0.686
+}

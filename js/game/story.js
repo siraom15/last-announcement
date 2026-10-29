@@ -453,8 +453,8 @@ async function event0317() {
       await say('ANS_R'); G.fx.flicker = 0.5; set('marked');
       note('doubts', 'd_answer', 'ฉันขานรับไปแล้ว… วิทยุทุกห้องตอบว่า “ได้ยินแล้ว”');
     } else if (c === 'peep') {
-      await P().walkTo(190); P().facing = -1;
-      G.fx.peep = 1; const back = { x: P().x }; G.enterRoom('street', 440, -1, true); P().hidden = true; G.camTarget = 440 - W / 2 + 200;
+      await P().walkTo(140); P().facing = -1;
+      G.fx.peep = 1; const back = { x: P().x }; G.enterRoom('street', 470, -1, true); P().hidden = true; G.camTarget = 470 - W / 2 + 200;
       await wait(2600); await say('PEEP_P');
       G.enterRoom('living', back.x, -1, true); G.fx.peep = 0; G.camTarget = null;
       set('clueNoBody'); note('doubts', 'd_nobody', 'มีเสียงดาวหน้าประตู… แต่ข้างนอกไม่มีใครเลย');
@@ -515,8 +515,8 @@ async function firstEncounter() {
     for (let i = 0; i < 6; i++) { sfx('heel', { lp: 600, gain: 0.6, pan: 0.6 }); await wait(520); }
     UI.cue('กึก… กึก… — ชั้นบน', '▲');
     await say('T1_1'); await say('T1_2');
-    T().spawn('hall1', 1990, 'scripted'); T().facing = -1;
-    await T().goTo('hall1', 1720);
+    T().spawn('hall1', 2040, 'scripted'); T().facing = -1;
+    await T().goTo('hall1', 1800);
     await say('T1_3');
     note('rules', 'r_teacher', 'ครูเวรได้ยินเสียงวิ่ง และเห็นแสงไฟฉาย — ย่อตัว ปิดไฟ หรือซ่อน');
     note('rules', 'r_heels', 'เสียงส้นรองเท้าหยุด = ครูกำลังฟัง');
@@ -525,10 +525,10 @@ async function firstEncounter() {
   UI.hint((G.input.usedTouch || matchMedia('(pointer: coarse)').matches) ? 'ซ่อนในตู้ล็อกเกอร์ (ปุ่ม “ใช้”) · ปิดไฟฉาย · อย่าวิ่ง' : 'ซ่อนในตู้ล็อกเกอร์ (E) · ปิดไฟฉาย (F) · อย่าวิ่ง', 7000);
   // tutorial patrol: walks to the lockers and back, then goes upstairs
   const t = T(); t.state = 'tutorial';
-  await new Promise((r) => { t.goal = { room: 'hall1', x: 820 }; t._arrive = r; });
+  await new Promise((r) => { t.goal = { room: 'hall1', x: 960 }; t._arrive = r; });
   if (t.state !== 'tutorial') return;
   t.holdT = 2;
-  await new Promise((r) => { t.goal = { room: 'hall1', x: 1990 }; t._arrive = r; });
+  await new Promise((r) => { t.goal = { room: 'hall1', x: 2040 }; t._arrive = r; });
   if (t.state !== 'tutorial') return;
   patrolOn('hall2s', 200); t.ri = 0;
   objective('หาทะเบียนหน้าที่หายไป (ชั้น 2)');
@@ -590,12 +590,12 @@ async function flashback() {
     const back = { room: S().room, x: P().x };
     await tween(G.fx, 'white', 1, 500);
     G.enterRoom('flashback', 480, 1, true); P().hidden = true; T().despawn();
-    const kid = actor({ kind: 'pakin_npc', room: 'flashback', x: 690, y: 432, h: 118, facing: -1, reach: 0 });
-    const dw = actor({ kind: 'daow', room: 'flashback', x: 430, y: 445, facing: 1 });
-    const other = actor({ kind: 'kid', room: 'flashback', x: 250, y: 445, facing: 1, alpha: 0.9, rim: true });
+    const kid = actor({ kind: 'pakin_npc', room: 'flashback', x: 870, y: 382, h: 118, facing: -1, reach: 0 });
+    const dw = actor({ kind: 'daow', room: 'flashback', x: 640, y: 445, facing: 1 });
+    const other = actor({ kind: 'kid', room: 'flashback', x: 500, y: 445, facing: 1, alpha: 0.9, rim: true });
     await tween(G.fx, 'white', 0, 900);
     tween(kid, 'reach', 1, 1500); await wait(2400);
-    dw.facing = -1; await wait(600); dw.moving = true; tween(dw, 'x', 300, 1600); tween(kid, 'x', 760, 3000); await wait(2600); dw.moving = false;
+    dw.facing = -1; await wait(600); dw.moving = true; tween(dw, 'x', 530, 1600); tween(kid, 'x', 940, 3000); await wait(2600); dw.moving = false;
     await tween(G.fx, 'white', 1, 900);
     [kid, dw, other].forEach(unactor);
     G.enterRoom(back.room, back.x, 1, true); P().hidden = false;
@@ -612,7 +612,7 @@ async function paScene() {
   set('paArrived'); T().despawn();
   await cut(async () => {
     G.fx.tension = 0.4; await wait(900);
-    const d = actor({ kind: 'daow_fake', room: 'pa_room', x: 160, facing: 1, alpha: 0 });
+    const d = actor({ kind: 'daow_fake', room: 'pa_room', x: 130, facing: 1, alpha: 0 });
     await tween(d, 'alpha', 1, 400);
     await say('PAR_1'); P().facing = -1;
     await say('PAR_2'); await say('PAR_3'); await say('PAR_4'); await say('PAR_5');
@@ -641,9 +641,9 @@ async function part2End() {
 // ── PART 3 ──────────────────────────────────────────────────────────
 async function teacherFinal() {
   await cut(async () => {
-    const t = actor({ kind: 'teacher_npc', room: 'bridge', x: 1300, facing: -1, alpha: 0, hold: 'book', tilt: 0.25 });
+    const t = actor({ kind: 'teacher_npc', room: 'bridge', x: 1255, facing: -1, alpha: 0, hold: 'book', tilt: 0.25 });
     await tween(t, 'alpha', 1, 600); scare('stinger', 0.3);
-    await P().walkTo(1120); P().facing = 1;
+    await P().walkTo(1080); P().facing = 1;
     await say('T3_1'); await say('T3_2'); await say('T3_3'); await say('T3_4');
     UI.toast('ยื่นทะเบียนยืนยัน 23 ชื่อให้ครู'); sfx('paper'); await wait(1200);
     if (S().voiceMark >= 2) {
@@ -662,7 +662,7 @@ async function teacherFinal() {
 
 async function announcement() {
   await cut(async () => {
-    UI.hud(false); P().x = 600; P().facing = 1; G.camTarget = 640 - W / 2;
+    UI.hud(false); P().x = 570; P().facing = 1; G.camTarget = 600 - W / 2;
     if (!S().inv.tape_m02) give('tape_m02', true);
     sfx('tape_click'); await wait(700);
     for (const id of ['M02_1', 'M02_2', 'M02_3', 'M02_4']) await say(id);
@@ -692,11 +692,11 @@ async function announcement() {
 async function finalChoice() {
   let fake;
   await cut(async () => {
-    UI.hud(false); P().x = 600; P().facing = 1; G.camTarget = 640 - W / 2;
+    UI.hud(false); P().x = 570; P().facing = 1; G.camTarget = 600 - W / 2;
     Audio.duck(0.3); G.fx.flicker = 0.2;
-    fake = actor({ kind: 'daow_fake', room: 'pa_room', x: 860, facing: -1, alpha: 0, jitter: 1 + S().voiceMark });
+    fake = actor({ kind: 'daow_fake', room: 'pa_room', x: 895, facing: -1, alpha: 0, jitter: 1 + S().voiceMark });
     await tween(fake, 'alpha', 1, 1200);
-    await say('FC_1'); fake.moving = true; await tween(fake, 'x', 760, 1400); fake.moving = false;
+    await say('FC_1'); fake.moving = true; await tween(fake, 'x', 720, 1600); fake.moving = false;
     await say('FC_2'); fake.reach = 0.6; await say('FC_3');
   });
   G.lock++;
@@ -732,7 +732,7 @@ async function endingB(fake) {
   tween(G.fx, 'water', 0, 1500); await wait(1500); await fadeTo(1, 800);
   G.enterRoom('hall1', 1500, -1, true);
   const r = actor({ kind: 'ratree', room: 'hall1', x: 860, facing: 1, h: 190, hold: 'book', alpha: 0.8 });
-  await fadeTo(0, 500); await P().walkTo(260); await fadeTo(1, 800); unactor(r);
+  await fadeTo(0, 500); await P().walkTo(140); await fadeTo(1, 800); unactor(r);
   await UI.titleCard('สามเดือนต่อมา', '', 2500);
   G.enterRoom('city', 380, 1, true); G.fx.water = 0; await fadeTo(0, 1500);
   sfx('tape_click'); await say('EB_2'); sfx('tape_click'); await say('EB_3');
@@ -754,8 +754,8 @@ async function endingC(fake) {
   await tween(r, 'alpha', 0, 1200); unactor(r);
   await fadeTo(1, 1500);
   G.enterRoom('school_dawn', 1040, 1, true); G.fx.water = 0; G.camTarget = 620;
-  const d = actor({ kind: 'daow', room: 'school_dawn', x: 1230, facing: -1 });
-  const kids = [1320, 1380, 1440, 1500, 1560].map((x) => actor({ kind: 'kid', room: 'school_dawn', x, facing: 1, alpha: 0.6 }));
+  const d = actor({ kind: 'daow', room: 'school_dawn', x: 1300, facing: -1 });
+  const kids = [1390, 1440, 1490, 1540, 1590].map((x) => actor({ kind: 'kid', room: 'school_dawn', x, facing: 1, alpha: 0.6 }));
   await fadeTo(0, 2000);
   for (const id of ['EC_7', 'EC_8', 'EC_9', 'EC_10', 'EC_11']) await say(id);
   d.facing = 1; d.moving = true; kids.forEach((k) => { k.moving = true; tween(k, 'x', k.x + 400, 5000); tween(k, 'alpha', 0, 5000); });
@@ -774,7 +774,7 @@ const ENDINGS = {
 async function endCard(k) {
   const m = meta(); m.endings[k] = true; saveMeta(m);
   G.actors = []; G.camTarget = null; UI.hud(false);
-  const r = await UI.ending(...ENDINGS[k]);
+  const r = await UI.ending(...ENDINGS[k], `end_${k.toLowerCase()}.jpg`);
   G.fx.grade = null; G.fx.dawn = 0; set('dawn', false);
   if (r === 'retry') G.restore(); else G.toTitle();
 }

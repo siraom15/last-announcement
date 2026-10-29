@@ -1,0 +1,29 @@
+<!doctype html><meta charset="utf-8"><title>roomcheck</title>
+<body style="margin:0;background:#111;color:#ddd;font:12px sans-serif">
+<script type="module">
+globalThis.__noop = 1;
+import { World } from '../js/game/world.js';
+const q = new URLSearchParams(location.search);
+const ids = (q.get('r') || Object.keys(World.rooms).join(',')).split(',');
+const files = await fetch('../assets/bg/manifest.json').then(r => r.json());
+const S = +(q.get('s') || 780 / 2400); // px per world unit
+for (const id of ids) {
+  const r = World.rooms[id]; const name = q.get('v') ? id + '_' + q.get('v') : id;
+  const w = Math.round(r.w * S), h = Math.round(540 * S);
+  const c = document.createElement('canvas'); c.width = w; c.height = h; c.style.display = 'block'; c.style.marginBottom = '14px';
+  const x = c.getContext('2d'); x.fillStyle = '#300'; x.fillRect(0, 0, w, h);
+  const lab = document.createElement('div'); lab.textContent = `${id} (w=${r.w})`; document.body.append(lab, c);
+  for (let n = 1; n <= Math.ceil(r.w / 960); n++) {
+    const f = `${name}_${n}.jpg`; if (!files.includes(f)) continue;
+    const img = new Image(); await new Promise((res) => { img.onload = res; img.onerror = res; img.src = '../assets/bg/' + f; });
+    x.drawImage(img, (n - 1) * 960 * S, 0, 960 * S, h);
+  }
+  x.strokeStyle = 'rgba(255,255,0,.6)'; x.beginPath(); x.moveTo(0, 400 * S); x.lineTo(w, 400 * S); x.stroke();
+  for (const o of r.objs) {
+    x.fillStyle = o.kind === 'door' ? '#0f0' : o.kind === 'hide' ? '#0af' : '#f0f';
+    x.fillRect(o.x * S - 1, 0, 2, h);
+    x.font = 'bold 9px sans-serif'; x.fillText((o.id || '').slice(0, 7), o.x * S + 2, 10 + (r.objs.indexOf(o) % 4) * 10);
+  }
+  for (let gx = 0; gx < r.w; gx += 100) { x.fillStyle = 'rgba(255,255,255,.5)'; x.fillText(gx, gx * S + 1, h - 2); }
+}
+</script>

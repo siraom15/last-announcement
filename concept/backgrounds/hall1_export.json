@@ -1,0 +1,20 @@
+{
+  "master": "concept\\backgrounds\\hall1_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-e655c6a7-57b1-48b3-954c-cf339ddf98a2.png",
+  "source_size": [
+    2171,
+    724
+  ],
+  "size": [
+    4400,
+    1080
+  ],
+  "files": [
+    "hall1_1.jpg",
+    "hall1_2.jpg",
+    "hall1_3.jpg"
+  ],
+  "unused_right_padding": 1360,
+  "floor_y": null,
+  "align_floor": 0.636
+}

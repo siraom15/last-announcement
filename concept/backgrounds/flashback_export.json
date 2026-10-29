@@ -1,0 +1,18 @@
+{
+  "master": "concept\\backgrounds\\flashback_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-715d8685-c4f3-4342-8fbc-aee3e914437f.png",
+  "source_size": [
+    1672,
+    941
+  ],
+  "size": [
+    1920,
+    1080
+  ],
+  "files": [
+    "flashback_1.jpg"
+  ],
+  "unused_right_padding": 0,
+  "floor_y": null,
+  "align_floor": 0.677
+}

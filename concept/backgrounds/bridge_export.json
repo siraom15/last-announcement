@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\bridge_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-b045467b-6d37-4913-ad65-224bf61b44bf.png",
+  "source_size": [
+    2158,
+    729
+  ],
+  "size": [
+    3200,
+    1080
+  ],
+  "files": [
+    "bridge_1.jpg",
+    "bridge_2.jpg"
+  ],
+  "unused_right_padding": 640,
+  "floor_y": null,
+  "align_floor": 0.636
+}

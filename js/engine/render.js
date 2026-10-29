@@ -1,11 +1,12 @@
 // Frame composition: painted backdrop -> characters -> darkness/light pass -> colour grade -> grain/vignette.
 import { G, W, H, FLOOR, clamp } from '../game/ctx.js';
 import { drawChar } from './chars.js';
-import { waterLayer, kidsInRoom } from '../game/world.js';
+import { waterLayer, kidsInRoom, World } from '../game/world.js';
+import { Sprites } from './sprites.js';
 import * as P from './paint.js';
 
 const hash = (s) => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
-const ACTOR_TYPE = { daow: 'girl', daow_fake: 'girl', nameless: 'nameless', kid: 'kid', teacher_npc: 'teacher', ratree: 'teacher', pakin_npc: 'man' };
+const ACTOR_TYPE = { daow: 'girl', daow_fake: 'girl', nameless: 'nameless', kid: 'kid', teacher_npc: 'teacher', ratree: 'ratree', pakin_npc: 'man' };
 
 export const Renderer = {
   overrides: new Set(),
@@ -18,29 +19,49 @@ export const Renderer = {
     g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.6)'); vx.fillStyle = g; vx.fillRect(0, 0, W, H); this.vign = v;
     this.drops = Array.from({ length: 170 }, () => ({ x: Math.random() * W, y: Math.random() * H, s: 0.6 + Math.random() * 0.8 }));
     // optional painted backgrounds: assets/bg/manifest.json lists file names, e.g. ["road_1.jpg", "road_2.jpg", "p3.jpg"]
-    fetch('assets/bg/manifest.json').then((r) => (r.ok ? r.json() : [])).then((files) => files.forEach((f) => this.overrides.add(f))).catch(() => {});
+    fetch('assets/bg/manifest.json').then((r) => (r.ok ? r.json() : [])).then((files) => {
+      files.forEach((f) => this.overrides.add(f));
+      if (G.room) { this.bgKey = null; this.buildBackdrop(G.room); } // the first room was built before the list arrived
+    }).catch(() => {});
+    Sprites.init();
   },
 
-  // A room image is either one wide file <name>.jpg/png, or 960-unit panels <name>_1.jpg, <name>_2.jpg … left→right.
-  paintOverride(x, room) {
-    const name = room.variant ? `${room.id}_${room.variant}` : room.id, have = (f) => this.overrides.has(f);
-    const one = ['jpg', 'png', 'webp'].map((e) => `${name}.${e}`).find(have);
-    if (one) { const img = new Image(); img.onload = () => x.drawImage(img, 0, 0, room.w, H); img.src = `assets/bg/${one}`; return; }
-    for (let n = 1; n <= Math.ceil(room.w / W); n++) {
-      const f = ['jpg', 'png', 'webp'].map((e) => `${name}_${n}.${e}`).find(have); if (!f) continue;
-      const img = new Image(); img.onload = () => x.drawImage(img, (n - 1) * W, 0, W, H); img.src = `assets/bg/${f}`;
-    }
+  // A room's art is either one wide file <name>.jpg/png/webp, or 960-unit panels <name>_1.jpg, <name>_2.jpg … left→right.
+  artFiles(room) {
+    const name = room.variant ? `${room.id}_${room.variant}` : room.id, have = (f) => this.overrides.has(f), ext = ['jpg', 'png', 'webp'];
+    const one = ext.map((e) => `${name}.${e}`).find(have);
+    if (one) return [{ f: one, x: 0, w: room.w }];
+    const out = [];
+    for (let n = 1; n <= Math.ceil(room.w / W); n++) { const f = ext.map((e) => `${name}_${n}.${e}`).find(have); if (f) out.push({ f, x: (n - 1) * W, w: W }); }
+    return out;
+  },
+  images: new Map(),
+  image(f) {
+    if (!this.images.has(f)) { const img = new Image(); img.decoding = 'async'; img.src = `assets/bg/${f}`; this.images.set(f, img); }
+    return this.images.get(f);
+  },
+  // warm the cache for rooms one door away so transitions don't pop
+  preloadNear(room) {
+    for (const e of World.exits(room.id)) { const r = World.get(e.to); if (r) this.artFiles(r).forEach((p) => this.image(p.f)); }
   },
 
   buildBackdrop(room) {
-    const key = room.id + (room.variant || '') + G.S.part;
+    const key = room.id + (room.variant || '') + G.S.part + this.overrides.size;
     if (this.bgKey === key) return;
-    P.seed(hash(key));
     const c = document.createElement('canvas'); c.width = room.w; c.height = H;
-    const x = c.getContext('2d'); room.paint(x, room.w);
-    P.grain(x, 0, 0, room.w, H, 0.08);
-    this.paintOverride(x, room);
+    const x = c.getContext('2d'), art = this.artFiles(room);
+    room.painted = art.length > 0;
+    if (room.painted) {
+      x.fillStyle = '#000'; x.fillRect(0, 0, room.w, H);
+      for (const p of art) {
+        const img = this.image(p.f), put = () => x.drawImage(img, p.x, 0, p.w, H);
+        if (img.complete && img.naturalWidth) put(); else img.addEventListener('load', put, { once: true });
+      }
+    } else {
+      P.seed(hash(key)); room.paint(x, room.w); P.grain(x, 0, 0, room.w, H, 0.08);
+    }
     this.bg = c; this.bgKey = key;
+    this.preloadNear(room);
   },
 
   drawActor(ctx, a, t) {
@@ -48,7 +69,7 @@ export const Renderer = {
     drawChar(ctx, type, a.x, a.y ?? FLOOR, {
       facing: a.facing || 1, alpha: a.alpha ?? 1, h: a.h, t, ribbon: a.kind === 'daow' || (a.kind === 'daow_fake' && a.ribbon !== false),
       jitter: a.kind === 'daow_fake' ? (a.jitter ?? 1.2) : a.jitter, moving: a.moving, phase: a.moving ? t * 7 : 0,
-      reach: a.reach, armOut: a.armOut, hold: a.hold, tilt: a.tilt, drip: a.kind === 'teacher_npc', rim: a.rim,
+      reach: a.reach, armOut: a.armOut, hold: a.hold, tilt: a.tilt, drip: a.kind === 'teacher_npc', rim: a.rim, ghost: a.kind === 'daow_fake',
     });
   },
 
@@ -94,7 +115,7 @@ export const Renderer = {
 
   lighting(room, cam, hand, t) {
     const lx = this.lx, fx = G.fx, s = 0.5;
-    let dark = clamp(room.dark * 0.8 + fx.blackout * 0.08 - (fx.dawn || 0) * 0.7, 0, 0.95);
+    let dark = clamp(room.dark * (room.painted ? 0.62 : 0.8) + fx.blackout * 0.08 - (fx.dawn || 0) * 0.7, 0, 0.95);
     lx.globalCompositeOperation = 'source-over'; lx.clearRect(0, 0, W * s, H * s);
     lx.fillStyle = `rgba(3,4,7,${dark})`; lx.fillRect(0, 0, W * s, H * s);
     lx.globalCompositeOperation = 'destination-out';

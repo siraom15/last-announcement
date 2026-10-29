@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\nurse_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-b3b639a2-0180-4d36-9814-1f39942ec865.png",
+  "source_size": [
+    1790,
+    879
+  ],
+  "size": [
+    2200,
+    1080
+  ],
+  "files": [
+    "nurse_1.jpg",
+    "nurse_2.jpg"
+  ],
+  "unused_right_padding": 1640,
+  "floor_y": null,
+  "align_floor": 0.642
+}

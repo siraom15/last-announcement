@@ -153,6 +153,7 @@ G.toTitle = () => {
     <div class="btns"><button data-a="new">เริ่มเกมใหม่</button>${save ? '<button data-a="cont">เล่นต่อจากจุดบันทึก</button>' : ''}<button data-a="set">ตั้งค่า</button></div>
     <p class="note">🎧 แนะนำให้ใช้หูฟัง · เล่นแนวนอน · <span id="voiceStat">${voiceText()}</span></p>
     ${ends.length ? `<p class="ends">ตอนจบที่ปลดล็อก: ${ends.join(' · ')}</p>` : ''}${dev}</div>`);
+  el.classList.add('title');
   el.querySelectorAll('[data-a]').forEach((b) => (b.onclick = () => {
     unlockAudio(); Audio.play('ui');
     if (b.dataset.a === 'new') begin(freshState(), true);

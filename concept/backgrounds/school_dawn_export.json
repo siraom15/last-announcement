@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\school_dawn_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-0dda42e8-1d1b-48b7-b230-25413f76884c.png",
+  "source_size": [
+    2157,
+    729
+  ],
+  "size": [
+    3200,
+    1080
+  ],
+  "files": [
+    "school_dawn_1.jpg",
+    "school_dawn_2.jpg"
+  ],
+  "unused_right_padding": 640,
+  "floor_y": null,
+  "align_floor": null
+}

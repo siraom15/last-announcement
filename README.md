@@ -49,9 +49,18 @@ All 121 lines live in `js/data/lines.js` (text + v3 audio tags + in-game FX). Th
 
 Takes are generated dry; the game adds the PA/tape/radio/"Nameless" processing live, so the real and fake Daow share one voice. Free-tier audio is non-commercial and needs ElevenLabs attribution.
 
-## Realistic backgrounds (optional)
+## Art
 
-Every room is painted procedurally. To swap in painted or photo-real art, save `assets/bg/<roomId>.jpg` at the room's width × 540 and add the id to `assets/bg/manifest.json`. Room ids and widths are in `js/game/world.js`; a prompt template is in `.claude/skills/thai-2d-horror/references/rooms-and-art.md`.
+All art is painted and lives in `assets/`; the game draws a procedural fallback only for anything missing.
+
+| What | Where | Notes |
+|---|---|---|
+| Room backgrounds | `assets/bg/<room>_<n>.jpg` | 1920×1080 panels, each covering 960 world units left→right; listed in `assets/bg/manifest.json` |
+| Dialogue portraits | `assets/portraits/<char>_<expr>.png` | 800×1000 RGBA; missing expressions fall back to `_neutral`; listed in `assets/portraits/manifest.json` |
+| Character sprites | `assets/sprites/<char>/full.png` | one side-view pose (facing right), animated in code as a cut-out (stride, bob, crouch, rim light) |
+| Title / ending CGs | `assets/art/title.jpg`, `end_a.jpg`, `end_b.jpg`, `end_c.jpg` | title-screen background and ending cards |
+
+Door and object positions in `js/game/world.js` are aligned to the painted rooms; `tools/roomcheck.html?r=<room>` stitches a room's panels and overlays every interactive x position to check alignment after replacing art. Clocks, chalkboard text, mirror reflections and lamps are drawn live on top of the paintings. The prompts used are in `ART_PROMPTS_V2_FULL.md` / `docs/ART_PROMPTS.md`.
 
 ## Making another game in this style
 

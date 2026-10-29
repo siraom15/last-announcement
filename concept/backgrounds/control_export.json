@@ -1,0 +1,18 @@
+{
+  "master": "concept\\backgrounds\\control_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-e3cd2ee1-d504-44e8-9bd6-4237c4789c67.png",
+  "source_size": [
+    1619,
+    971
+  ],
+  "size": [
+    1800,
+    1080
+  ],
+  "files": [
+    "control_1.jpg"
+  ],
+  "unused_right_padding": 120,
+  "floor_y": null,
+  "align_floor": 0.657
+}

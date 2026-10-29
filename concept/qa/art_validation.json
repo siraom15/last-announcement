@@ -1,0 +1,751 @@
+{
+  "scope": "File existence, dimensions, decoding, alpha bounds, and manifest membership only; not visual acceptance or animation approval.",
+  "counts": {
+    "sheets": 5,
+    "portraits": 14,
+    "background_panels": 42,
+    "sprite_sources": 4,
+    "key_art": 4
+  },
+  "checked_files": 69,
+  "errors": [],
+  "files": [
+    {
+      "path": "concept/pakin_sheet.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "concept/daow_sheet.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "concept/mom_sheet.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "concept/duty_teacher_sheet.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "concept/teacher_ratree_sheet.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/portraits/daow_eerie.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        25,
+        15,
+        770,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/daow_happy.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        13,
+        14,
+        772,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/daow_neutral.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        19,
+        783,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/daow_sad.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        18,
+        23,
+        786,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/mom_neutral.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        12,
+        769,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/mom_sad.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        14,
+        798,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/pakin_eerie.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        4,
+        800,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/pakin_neutral.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        0,
+        796,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/pakin_sad.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        18,
+        765,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/pakin_scared.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        13,
+        6,
+        800,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/ratree_happy.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        12,
+        0,
+        756,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/ratree_neutral.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        15,
+        0,
+        740,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/teacher_eerie.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        18,
+        787,
+        1000
+      ]
+    },
+    {
+      "path": "assets/portraits/teacher_neutral.png",
+      "size": [
+        800,
+        1000
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        0,
+        0,
+        786,
+        1000
+      ]
+    },
+    {
+      "path": "assets/bg/archive_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/archive_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/bridge_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/bridge_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/city_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/control_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/daow_room_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/daow_room_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/flashback_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall1_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall1_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall1_3.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall2_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall2_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall2s_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall2s_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/hall2s_3.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/library_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/library_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/living_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/living_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/mom_room_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/mom_room_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/nurse_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/nurse_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/p3_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/p3_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/pa_room_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/pa_room_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/road_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/road_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/road_3.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/sala_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/sala_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/sala_morning_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/sala_morning_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/school_dawn_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/school_dawn_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/school_gate_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/school_gate_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/street_1.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/bg/street_2.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/sprites/pakin/full.png",
+      "size": [
+        230,
+        464
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        36,
+        32,
+        184,
+        432
+      ]
+    },
+    {
+      "path": "assets/sprites/daow/full.png",
+      "size": [
+        131,
+        334
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        32,
+        32,
+        99,
+        302
+      ]
+    },
+    {
+      "path": "assets/sprites/teacher/full.png",
+      "size": [
+        410,
+        604
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        75,
+        32,
+        353,
+        572
+      ]
+    },
+    {
+      "path": "assets/sprites/nameless/full.png",
+      "size": [
+        459,
+        684
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "subject_bounds": [
+        42,
+        32,
+        377,
+        652
+      ]
+    },
+    {
+      "path": "assets/art/title.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/art/end_a.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/art/end_b.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    },
+    {
+      "path": "assets/art/end_c.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "remaining": [
+    "Manual puppet layers with redrawn concealed joints and common canvas origin",
+    "45/90 degree elbow and knee animation tests",
+    "Complete room-by-room visual placement and interaction alignment review"
+  ]
+}

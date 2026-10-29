@@ -48,7 +48,7 @@ export const Player = {
     if (this.hidden) return null;
     return drawChar(ctx, 'man', this.x, FLOOR, {
       facing: this.facing, phase: this.phase, moving: this.moving, crouch: this.crouch,
-      armOut: G.S.flashlight, hold: 'light', lightOn: G.S.flashlight,
+      armOut: G.S.flashlight, hold: 'light', lightOn: G.S.flashlight, running: this.running,
     });
   },
 };

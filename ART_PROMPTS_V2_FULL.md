@@ -1,0 +1,586 @@
+# ART_PROMPTS_V2_FULL — เสียงตามสาย (The Last Announcement)
+
+**Version:** 2.0 — full production prompt library  
+**Game:** 2D side-scrolling psychological horror, rural Thailand, first-person dialogue portraits + side-view exploration  
+**Source of truth:** Updated from the user's `ART_PROMPTS.md`. Character facts, filenames, level widths, placement coordinates and production order are retained; the revised prompt wording and validation rules below are production recommendations.
+
+> **Important:** Each fenced `text` block is a complete English prompt you can paste into an image generator. It does not require appending `[STYLE]` or filling in a generic character description. For individual portraits, attach the APPROVED sheet of that exact character as a visual reference. For consecutive backgrounds, attach the previous panel to the outpaint/extend operation. Image generation cannot reliably guarantee exact pixel dimensions, genuine transparency, identical characters, precise 74% placement, or riggable layers; these are **acceptance criteria** to check and correct after generation, not promises made by a prompt.
+
+## 0. Production rules / acceptance criteria
+
+1. **Never batch unrelated assets into one collage.** One output request = one usable asset; a turnaround sheet is explicitly the only exception.
+2. **Lock identity with images:** approve one character sheet, reuse it as a visual reference for all portraits and sprites. Keep character-specific accessories consistent, not invented on the fly.
+3. **Consistency:** same ink line width, stylization, skin undertones, rain/wetness logic, clothing palette, texture and lighting language across the game. Preserve the recognizable rural Thai architectural context.
+4. **Portraits:** `assets/portraits/`, exactly 800×1000, PNG RGBA true transparency. Pakin faces image-right; Daow, Mom, Teacher and Ratree face image-left. Portrait can be darkened at runtime for the inactive speaker.
+5. **Backgrounds:** `assets/bg/`, 1920×1080 JPG quality 85+ or PNG. No people, no text, no clocks, no dynamic reflections. Flat wall-facing orthographic view. Back wall meets floor at y = 799.2px (74% of 1080, rounded at QA). Keep lower floor band clear so actors can move.
+6. **World coordinates:** 2 output pixels = 1 world unit. A 1920px panel covers 960 world units; panel 1 world x=0–960, panel 2 x=960–1920, etc. Long rooms should be built as one continuous image and sliced; generate independent panels only when reliable image-to-image continuity is available.
+7. **Layering:** text on signs/blackboards, moving clocks, mirrors/reflections, switches, interactive doors, jump-scare silhouettes, flooding, UI and weather particles are rendered in-engine, NOT baked into the background.
+8. **Rig:** source `full.png` is side profile on transparent background; limb layers must be manually extracted or redrawn with intact joints, not fabricated by blindly slicing transparent pixels. All layers share the same canvas origin and identical bounds.
+9. **Delivery:** lowercase English snake_case filenames, no watermarks, no caption labels drawn into final art. Verify dimensions and alpha with an image utility before placing in `assets/`.
+10. **Prompt execution note:** words like 'exactly' indicate targets; model output still requires inspection. For 16:9 to 4:5 crops or exact pixel export, use a deterministic resize/crop step without distorting anatomy.
+
+## 1. Character turnaround sheets — generate and approve FIRST
+
+### Character sheet — Pakin
+
+**Output:** `concept/pakin_sheet.png`    
+**Spec:** single character sheet; ideally 3:2 or 16:9; reference-only
+
+```text
+Create exactly ONE clean character turnaround sheet for Pakin. Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Exactly three aligned full-body views of the SAME character: FRONT facing camera, STRICT RIGHT-FACING PROFILE, and BACK facing away. All three must have matching height, anatomy, clothing details, accessories and colors; feet share one baseline. Neutral relaxed standing pose, arms slightly separated, no overlapping legs or hands; full head and shoes visible. This is a visual design approval sheet, NOT an animation sprite and NOT a collage of portraits. Solid neutral grey studio backdrop; even reference lighting; no captions or labels. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Character sheet — Daow
+
+**Output:** `concept/daow_sheet.png`    
+**Spec:** single character sheet; ideally 3:2 or 16:9; reference-only
+
+```text
+Create exactly ONE clean character turnaround sheet for Daow. Daow is a 9-year-old Thai girl, with a round gentle youthful face, short straight black bob, a bright sky-blue ribbon tied on the LEFT side of her hair, and an authentic Thai primary-school uniform: white short-sleeved blouse with sailor-style collar and navy pleated skirt; white socks and black school shoes. She carries a small silver bicycle bell. Clothes and hair are faintly wet; no adult styling. Exactly three aligned full-body views of the SAME character: FRONT facing camera, STRICT RIGHT-FACING PROFILE, and BACK facing away. All three must have matching height, anatomy, clothing details, accessories and colors; feet share one baseline. Neutral relaxed standing pose, arms slightly separated, no overlapping legs or hands; full head and shoes visible. This is a visual design approval sheet, NOT an animation sprite and NOT a collage of portraits. Solid neutral grey studio backdrop; even reference lighting; no captions or labels. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Character sheet — Mom
+
+**Output:** `concept/mom_sheet.png`    
+**Spec:** single character sheet; ideally 3:2 or 16:9; reference-only
+
+```text
+Create exactly ONE clean character turnaround sheet for Mom. Pakin's mother is a Thai woman in her mid-50s with a kind, tired, sorrowful face, greying black hair tied in a low bun, cream-colored simple blouse, a thin gold necklace, and a dark ankle-length patterned traditional-looking skirt. Natural middle-aged proportions; humble rural family styling. Exactly three aligned full-body views of the SAME character: FRONT facing camera, STRICT RIGHT-FACING PROFILE, and BACK facing away. All three must have matching height, anatomy, clothing details, accessories and colors; feet share one baseline. Neutral relaxed standing pose, arms slightly separated, no overlapping legs or hands; full head and shoes visible. This is a visual design approval sheet, NOT an animation sprite and NOT a collage of portraits. Solid neutral grey studio backdrop; even reference lighting; no captions or labels. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Character sheet — Duty Teacher
+
+**Output:** `concept/duty_teacher_sheet.png`    
+**Spec:** single character sheet; ideally 3:2 or 16:9; reference-only
+
+```text
+Create exactly ONE clean character turnaround sheet for Duty Teacher. The Duty Teacher is a tall, unnaturally thin Thai female schoolteacher ghost, an altered form of Teacher Ratree: disproportionately long neck and arms, soaked straight black hair masking most of her face with ONE pale eye visible, tired and sorrowful as well as threatening. She wears an aged khaki-beige Thai government-teacher blouse with shoulder boards and a LONG DARK STRAIGHT SKIRT, dark low heels, and hugs a thick red-brown school attendance register. Water drips from the hems. Never replace her Thai teacher uniform with a dress or nurse outfit. Exactly three aligned full-body views of the SAME character: FRONT facing camera, STRICT RIGHT-FACING PROFILE, and BACK facing away. All three must have matching height, anatomy, clothing details, accessories and colors; feet share one baseline. Neutral relaxed standing pose, arms slightly separated, no overlapping legs or hands; full head and shoes visible. This is a visual design approval sheet, NOT an animation sprite and NOT a collage of portraits. Solid neutral grey studio backdrop; even reference lighting; no captions or labels. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Character sheet — Teacher Ratree
+
+**Output:** `concept/teacher_ratree_sheet.png`    
+**Spec:** single character sheet; ideally 3:2 or 16:9; reference-only
+
+```text
+Create exactly ONE clean character turnaround sheet for Teacher Ratree. Teacher Ratree is the same woman BEFORE ghostly distortion: a Thai female teacher in her 40s, recognizable underlying facial structure of the Duty Teacher, neat dark hair in a bun, correctly tailored khaki Thai government teacher uniform with shoulder boards, natural body proportions, calm and compassionate face, holding the same thick red-brown attendance register. Exactly three aligned full-body views of the SAME character: FRONT facing camera, STRICT RIGHT-FACING PROFILE, and BACK facing away. All three must have matching height, anatomy, clothing details, accessories and colors; feet share one baseline. Neutral relaxed standing pose, arms slightly separated, no overlapping legs or hands; full head and shoes visible. This is a visual design approval sheet, NOT an animation sprite and NOT a collage of portraits. Solid neutral grey studio backdrop; even reference lighting; no captions or labels. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+## 2. Dialogue portraits — full standalone prompts
+
+### pakin_neutral.png
+
+**Output:** `assets/portraits/pakin_neutral.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing right; expression: calm but tired and guarded, lips closed and dark eyes alert. Hold the metal flashlight near his chest; keep his jacket unzipped with grey shirt visible. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### pakin_scared.png
+
+**Output:** `assets/portraits/pakin_scared.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing right; expression: wide eyes, mouth slightly open in sudden shock, anxious brows. Raise the flashlight defensively; faint rain and perspiration bead on his face. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### pakin_sad.png
+
+**Output:** `assets/portraits/pakin_sad.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing right; expression: eyes glossy with tears held back, brows pinched, gaze turned downward. Lower the flashlight, shoulders subtly slumped; grief should feel restrained. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### pakin_eerie.png
+
+**Output:** `assets/portraits/pakin_eerie.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing right; expression: hollow unfocused eyes and an unnaturally faint smile, face half in shadow. This is the unsettling Bad Ending variation; preserve his recognizable identity. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### daow_neutral.png
+
+**Output:** `assets/portraits/daow_neutral.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Daow, using the approved character sheet as the image reference. CHARACTER LOCK: Daow is a 9-year-old Thai girl, with a round gentle youthful face, short straight black bob, a bright sky-blue ribbon tied on the LEFT side of her hair, and an authentic Thai primary-school uniform: white short-sleeved blouse with sailor-style collar and navy pleated skirt; white socks and black school shoes. She carries a small silver bicycle bell. Clothes and hair are faintly wet; no adult styling. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: soft, calm, innocent expression with a hint of sadness. Hold the tiny silver bicycle bell; visible sky-blue ribbon on her left side. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### daow_sad.png
+
+**Output:** `assets/portraits/daow_sad.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Daow, using the approved character sheet as the image reference. CHARACTER LOCK: Daow is a 9-year-old Thai girl, with a round gentle youthful face, short straight black bob, a bright sky-blue ribbon tied on the LEFT side of her hair, and an authentic Thai primary-school uniform: white short-sleeved blouse with sailor-style collar and navy pleated skirt; white socks and black school shoes. She carries a small silver bicycle bell. Clothes and hair are faintly wet; no adult styling. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: teary eyes, gentle frown, lips trembling slightly. A few wet black strands cling to her cheeks; keep the sky-blue ribbon visible. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### daow_happy.png
+
+**Output:** `assets/portraits/daow_happy.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Daow, using the approved character sheet as the image reference. CHARACTER LOCK: Daow is a 9-year-old Thai girl, with a round gentle youthful face, short straight black bob, a bright sky-blue ribbon tied on the LEFT side of her hair, and an authentic Thai primary-school uniform: white short-sleeved blouse with sailor-style collar and navy pleated skirt; white socks and black school shoes. She carries a small silver bicycle bell. Clothes and hair are faintly wet; no adult styling. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: warm, relieved, gentle smile, bright soft eyes. Gentle golden dawn rim light from image-right; no frightening features. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### daow_eerie.png
+
+**Output:** `assets/portraits/daow_eerie.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of The false Daow / the Nameless impersonating Daow, using the approved character sheet as the image reference. CHARACTER LOCK: An imitation of Daow: a 9-year-old Thai girl in Daow's recognizable white sailor-collar school blouse and navy pleated skirt, short soaked black bob, BUT NO sky-blue ribbon, eyes concealed by wet bangs, eerie too-wide smile, pale grey skin, slightly too-long fingers and dripping clothes. Preserve a child-sized silhouette; do not sexualize or gore the character. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: pleasant-looking smile that becomes subtly wrong and uncanny. Emphasize the missing ribbon as the player recognition clue. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### mom_neutral.png
+
+**Output:** `assets/portraits/mom_neutral.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin’s mother, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin's mother is a Thai woman in her mid-50s with a kind, tired, sorrowful face, greying black hair tied in a low bun, cream-colored simple blouse, a thin gold necklace, and a dark ankle-length patterned traditional-looking skirt. Natural middle-aged proportions; humble rural family styling. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: gentle tired smile and sorrowful kind eyes. Shoulders slightly turned, thin gold necklace visible. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### mom_sad.png
+
+**Output:** `assets/portraits/mom_sad.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Pakin’s mother, using the approved character sheet as the image reference. CHARACTER LOCK: Pakin's mother is a Thai woman in her mid-50s with a kind, tired, sorrowful face, greying black hair tied in a low bun, cream-colored simple blouse, a thin gold necklace, and a dark ankle-length patterned traditional-looking skirt. Natural middle-aged proportions; humble rural family styling. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: crying quietly with visibly wet cheeks and tightly held grief. One hand raised near her mouth; no melodramatic screaming. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### teacher_neutral.png
+
+**Output:** `assets/portraits/teacher_neutral.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of The Duty Teacher, using the approved character sheet as the image reference. CHARACTER LOCK: The Duty Teacher is a tall, unnaturally thin Thai female schoolteacher ghost, an altered form of Teacher Ratree: disproportionately long neck and arms, soaked straight black hair masking most of her face with ONE pale eye visible, tired and sorrowful as well as threatening. She wears an aged khaki-beige Thai government-teacher blouse with shoulder boards and a LONG DARK STRAIGHT SKIRT, dark low heels, and hugs a thick red-brown school attendance register. Water drips from the hems. Never replace her Thai teacher uniform with a dress or nurse outfit. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: cold unwavering stare, one pale eye through wet hair, head slightly tilted. Hold the red-brown attendance ledger against her chest; reveal khaki shoulder boards. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### teacher_eerie.png
+
+**Output:** `assets/portraits/teacher_eerie.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of The Duty Teacher, using the approved character sheet as the image reference. CHARACTER LOCK: The Duty Teacher is a tall, unnaturally thin Thai female schoolteacher ghost, an altered form of Teacher Ratree: disproportionately long neck and arms, soaked straight black hair masking most of her face with ONE pale eye visible, tired and sorrowful as well as threatening. She wears an aged khaki-beige Thai government-teacher blouse with shoulder boards and a LONG DARK STRAIGHT SKIRT, dark low heels, and hugs a thick red-brown school attendance register. Water drips from the hems. Never replace her Thai teacher uniform with a dress or nurse outfit. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: aggressive uncanny stare as wet hair parts to reveal one unblinking eye and a crooked mouth. Lean toward the viewer; do not change the clothes or ledger color. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### ratree_neutral.png
+
+**Output:** `assets/portraits/ratree_neutral.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Teacher Ratree, using the approved character sheet as the image reference. CHARACTER LOCK: Teacher Ratree is the same woman BEFORE ghostly distortion: a Thai female teacher in her 40s, recognizable underlying facial structure of the Duty Teacher, neat dark hair in a bun, correctly tailored khaki Thai government teacher uniform with shoulder boards, natural body proportions, calm and compassionate face, holding the same thick red-brown attendance register. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: calm gentle attentive expression. Hold the matching red-brown attendance ledger at waist height. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### ratree_happy.png
+
+**Output:** `assets/portraits/ratree_happy.png`    
+**Spec:** 800×1000 PNG RGBA transparent; one emotion
+
+```text
+Generate ONE standalone half-body dialogue portrait of Teacher Ratree, using the approved character sheet as the image reference. CHARACTER LOCK: Teacher Ratree is the same woman BEFORE ghostly distortion: a Thai female teacher in her 40s, recognizable underlying facial structure of the Duty Teacher, neat dark hair in a bun, correctly tailored khaki Thai government teacher uniform with shoulder boards, natural body proportions, calm and compassionate face, holding the same thick red-brown attendance register. Keep the same age, face shape, skin, hairstyle, clothing, proportions, motif and accessories as the reference. Three-quarter bust view facing left; expression: soft relieved warm smile, eyes gently closing. Golden dawn light softens the same khaki uniform and recognizable face. Frame from the top of the hair to around the waist, with comfortable transparent margins; do not cut off the head, elbow or requested held object. One character only, no ground shadow. Truly transparent RGBA background with crisp antialiased alpha and zero background fill. Target finished export: 800 x 1000 pixels (4:5); post-process and validate size and alpha if the generator cannot guarantee them. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+## 3. Background master prompts — PART 1: the village
+
+### Background — Road into the village (`road`)
+
+**Output:** `assets/bg/road_1.jpg … road_3.jpg`    
+**Spec:** 3 × 1920×1080 JPG (quality 85+); world width 2000; 2 px/world unit
+
+```text
+Create the master wide background for the Road into the village level, continuous horizontal side-scroll environment. Location and appearance: Nighttime rural Thai asphalt road in heavy rain, cracked wet pavement with shallow puddles, flooded rice fields, coconut palms, low tree line and sagging powerlines; cold slate blue-grey light. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x 0–400 leave a reserved car silhouette area; x 660 large fallen tree across roadside (foreground obstacles implemented separately, so depict only its distant trunk/root context or leave clearance); x 1080–1180 broken wooden village sign board with EMPTY lettering space. The actual parked car and interactable fallen tree should be separate foreground sprites, not permanently painted into the traversable floor. Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 3 sequential panels of 1920×1080 pixels named assets/bg/road_1.jpg through assets/bg/road_3.jpg; world width is 2000 units (render span ~4000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Village pavilion (sala) (`sala`)
+
+**Output:** `assets/bg/sala_1.jpg … sala_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1800; 2 px/world unit
+
+```text
+Create the master wide background for the Village pavilion (sala) level, continuous horizontal side-scroll environment. Location and appearance: Old roofed rural Thai public pavilion in rain, timber beams, weathered stone memorial base, notice board, unlit concrete pole with two rusty horn speakers, single dying warm streetlamp. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x 260–680 pavilion roof and frame; x 420–540 EMPTY posted schedule board; x 800–1000 memorial plaque with pried-off lower panel and exactly 23 screw holes if legible; x 1000–1260 EMPTY map board and faded photo slots; x 1460 horn-speaker pole; x 1580–1730 EMPTY school direction sign.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/sala_1.jpg through assets/bg/sala_2.jpg; world width is 1800 units (render span ~3600 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Village pavilion — grey morning Bad Ending (`sala_morning`)
+
+**Output:** `assets/bg/sala_morning_1.jpg … sala_morning_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1800; 2 px/world unit
+
+```text
+Create the master wide background for the Village pavilion — grey morning Bad Ending level, continuous horizontal side-scroll environment. Location and appearance: THE SAME village pavilion, identical geometry, memorial base, notice board, horn speakers and road as the approved `sala` background, but rain has stopped and grey, cold, overcast morning fog covers the scene. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): Preserve approved `sala` landmark coordinates x 260–680, x 800–1000, x 1000–1260, x 1460, x 1580–1730. No geometry change. Use approved `sala` panorama as an image-to-image reference; this is a lighting/weather variant, not a new level layout. Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/sala_morning_1.jpg through assets/bg/sala_morning_2.jpg; world width is 1800 units (render span ~3600 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Street outside mother’s house (`street`)
+
+**Output:** `assets/bg/street_1.jpg … street_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1500; 2 px/world unit
+
+```text
+Create the master wide background for the Street outside mother’s house level, continuous horizontal side-scroll environment. Location and appearance: Night rural Thai residential road with an old two-storey dark teak-plank wooden house and pitched roof, barred windows, shuttered side windows, rain-soaked dirt street and a distant school building on a hill at image-right. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x 160–720 house façade; x 440 reserved doorway frame ~90 units wide; small dim porch light; the distant school silhouette appears to the right; leave walk lane empty.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/street_1.jpg through assets/bg/street_2.jpg; world width is 1500 units (render span ~3000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Mother’s old living room (`living`)
+
+**Output:** `assets/bg/living_1.jpg … living_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1300; 2 px/world unit
+
+```text
+Create the master wide background for the Mother’s old living room level, continuous horizontal side-scroll environment. Location and appearance: Interior of an abandoned Thai teak-wood home at night, aged planks, water staining, dusty barred window, worn sofa, fading family photo frames, modest low table, old cassette player on the table and staircase at right. One table surface is strangely clean. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x160 reserved entry frame; x360 EMPTY wall patch for dynamic clock; x470–600 barred window; x560–820 sofa placed against wall, not blocking floor; x760–940 frame hangings; x860–1020 small low table and clean patch, cassette as separate overlay; x1030 extension cord position; x1080–1300 stair opening.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/living_1.jpg through assets/bg/living_2.jpg; world width is 1300 units (render span ~2600 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Mother’s house upstairs corridor (`hall2`)
+
+**Output:** `assets/bg/hall2_1.jpg … hall2_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1100; 2 px/world unit
+
+```text
+Create the master wide background for the Mother’s house upstairs corridor level, continuous horizontal side-scroll environment. Location and appearance: Narrow upstairs Thai timber corridor at night with dust, peeling planks, stairwell rail and wet window; gloomy moonlight through rain. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x40–300 stair opening; x520 EMPTY bedroom doorway frame for mother’s room; x820 EMPTY bedroom doorway frame for Daow’s room with a BLANK child-name plate; x960–1060 window.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/hall2_1.jpg through assets/bg/hall2_2.jpg; world width is 1100 units (render span ~2200 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Mother’s bedroom (`mom_room`)
+
+**Output:** `assets/bg/mom_room_1.jpg … mom_room_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1000; 2 px/world unit
+
+```text
+Create the master wide background for the Mother’s bedroom level, continuous horizontal side-scroll environment. Location and appearance: Small carefully kept but dusty middle-aged Thai mother’s bedroom with worn wood wardrobe, a family-photo frame, an empty paper calendar backing, old writing desk and little locked wooden box. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x230–350 wooden wardrobe (closet hiding interaction as sprite); x470–550 framed photo; x600–700 BLANK calendar paper overlay area; x740–940 writing desk and small box silhouette, with the interactable box a separate sprite.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/mom_room_1.jpg through assets/bg/mom_room_2.jpg; world width is 1000 units (render span ~2000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Daow’s childhood bedroom (`daow_room`)
+
+**Output:** `assets/bg/daow_room_1.jpg … daow_room_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1000; 2 px/world unit
+
+```text
+Create the master wide background for the Daow’s childhood bedroom level, continuous horizontal side-scroll environment. Location and appearance: A nine-year-old Thai girl’s bedroom left untouched for sixteen years, little bed with old white rabbit plush, navy schoolbag, faded children's objects, tiny study desk, faint water stains and still cold moonlight. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x330–550 wide BLANK cream wall reserved for dynamic chalk drawing; x560–790 child bed against back wall; x740–790 navy backpack; x830–960 low children's desk.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/daow_room_1.jpg through assets/bg/daow_room_2.jpg; world width is 1000 units (render span ~2000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+## 4. Background master prompts — PART 2: the abandoned school
+
+Every school interior background must maintain the EXACT same old cream-upper / dirty-green-lower walls, terrazzo floor, flickering fluorescent fixtures, and a visible historical flood-stain line roughly 60% down the wall unless architecture obscures it.
+
+### Background — Old school exterior / gate (`school_gate`)
+
+**Output:** `assets/bg/school_gate_1.jpg … school_gate_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1600; 2 px/world unit
+
+```text
+Create the master wide background for the Old school exterior / gate level, continuous horizontal side-scroll environment. Location and appearance: Abandoned two-storey concrete rural Thai primary school at night in hard rain; rows of dark rectangular windows, brown flood stain across the lower walls, weed growth, heavy rusted metal sliding gate. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x160–1500 continuous school building; x1100–1350 empty school-gate sign board and iron gate. Keep all writing out of the generated image.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/school_gate_1.jpg through assets/bg/school_gate_2.jpg; world width is 1600 units (render span ~3200 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School ground-floor corridor (`hall1`)
+
+**Output:** `assets/bg/hall1_1.jpg … hall1_3.jpg`    
+**Spec:** 3 × 1920×1080 JPG (quality 85+); world width 2200; 2 px/world unit
+
+```text
+Create the master wide background for the School ground-floor corridor level, continuous horizontal side-scroll environment. Location and appearance: Long old Thai primary school corridor at night, cream upper wall / dark green lower wall, continuous flood stain, wet terrazzo, barred windows, fluorescent tubes, curled papers on a pin board. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x170 double exit-door EMPTY frame; x300–420 barred window; x600 P3 classroom entry frame; x760–950 blank notice board; x990–1200 four steel locker frames positioned against back wall; x1230–1350 window; x1450 nurse's room entry frame; x1640–1760 window; x1880–2140 stair opening.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 3 sequential panels of 1920×1080 pixels named assets/bg/hall1_1.jpg through assets/bg/hall1_3.jpg; world width is 2200 units (render span ~4400 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Primary grade 3 classroom (`p3`)
+
+**Output:** `assets/bg/p3_1.jpg … p3_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1500; 2 px/world unit
+
+```text
+Create the master wide background for the Primary grade 3 classroom level, continuous horizontal side-scroll environment. Location and appearance: Abandoned Thai Grade 3 classroom with small battered desks arranged toward a large green chalkboard, water-damaged classroom notices, teacher's desk, fans and stained cream-green walls. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x480–1000 LARGE COMPLETELY BLANK green chalkboard; x1080–1270 teacher desk with drawer fronts; x1290–1460 children's activity board with no legible photographs or writing. Background student desks can be in distant rows; foreground interactive desks must be separate sprites.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/p3_1.jpg through assets/bg/p3_2.jpg; world width is 1500 units (render span ~3000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School second-floor corridor (`hall2s`)
+
+**Output:** `assets/bg/hall2s_1.jpg … hall2s_3.jpg`    
+**Spec:** 3 × 1920×1080 JPG (quality 85+); world width 2400; 2 px/world unit
+
+```text
+Create the master wide background for the School second-floor corridor level, continuous horizontal side-scroll environment. Location and appearance: Second-floor wing of the same abandoned Thai primary school, cream-and-green walls, flood stain, worn terrazzo floor, barred windows, staircase landing at far left and lone flickering light. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x40–300 stair opening; x600 library entry frame; x780–890 window; x1000 music-room entry frame; x1180–1390 four metal lockers against wall; x1420–1530 window; x1650 metal records-room doorway with EMPTY access-card reader base; x1900–2010 filing cabinet; x2140–2250 window.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 3 sequential panels of 1920×1080 pixels named assets/bg/hall2s_1.jpg through assets/bg/hall2s_3.jpg; world width is 2400 units (render span ~4800 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School library (`library`)
+
+**Output:** `assets/bg/library_1.jpg … library_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1500; 2 px/world unit
+
+```text
+Create the master wide background for the School library level, continuous horizontal side-scroll environment. Location and appearance: Small old Thai school library with tall warped timber bookcases, damp curled books, a long reading desk, card-catalog drawer unit, dust floating in cold weak light; school cream-green walls with flood mark. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x230–700 two tall bookcases; x740 empty pinned note location; x860 BLANK wall area for in-engine clock; x920–1180 reading desk; x1250–1350 steel card drawer; x1380–1470 empty tall mirror FRAME with NO reflection or glass content.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/library_1.jpg through assets/bg/library_2.jpg; world width is 1500 units (render span ~3000 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School nurse’s room (`nurse`)
+
+**Output:** `assets/bg/nurse_1.jpg … nurse_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1100; 2 px/world unit
+
+```text
+Create the master wide background for the School nurse’s room level, continuous horizontal side-scroll environment. Location and appearance: Old rural Thai school infirmary at night, pale green water-marked walls, two worn iron hospital beds and stained cotton sheets, small medicine cabinet, chilly fluorescent light; melancholy not gory. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x220–450 left metal bed; x460–570 privacy-curtain RAIL ONLY / neutral curtain background; x590–820 right metal bed; x900–1020 medicine cabinet with a simple geometric red medical cross. Curtain used for hiding is an engine overlay.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/nurse_1.jpg through assets/bg/nurse_2.jpg; world width is 1100 units (render span ~2200 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School records archive (`archive`)
+
+**Output:** `assets/bg/archive_1.jpg … archive_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1200; 2 px/world unit
+
+```text
+Create the master wide background for the School records archive level, continuous horizontal side-scroll environment. Location and appearance: Cramped old school records room with grey filing cabinets, warped folders, small work desk and vintage reel-to-reel tape machine, water damage and peeling plaster. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 metal entry frame; x240–640 four grey cabinets; x680 blank note surface; x780–980 tape-desk location with the cassette and playback controls as game overlays; x1030–1140 tall hiding locker.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/archive_1.jpg through assets/bg/archive_2.jpg; world width is 1200 units (render span ~2400 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Covered inter-building walkway (`bridge`)
+
+**Output:** `assets/bg/bridge_1.jpg … bridge_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1600; 2 px/world unit
+
+```text
+Create the master wide background for the Covered inter-building walkway level, continuous horizontal side-scroll environment. Location and appearance: Roofed concrete corridor joining two Thai school wings, long band of barred windows looking out at lightning and heavy rain; stained concrete floor and a faint horn speaker at one end. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x600 utility control room doorway; x1300 PA room timber doorway; rusted horn speaker mounted above. All interactive door leaves are separate sprites.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/bridge_1.jpg through assets/bg/bridge_2.jpg; world width is 1600 units (render span ~3200 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Electrical control room (`control`)
+
+**Output:** `assets/bg/control_1.jpg … control_1.jpg`    
+**Spec:** 1 × 1920×1080 JPG (quality 85+); world width 900; 2 px/world unit
+
+```text
+Create the master wide background for the Electrical control room level, continuous horizontal side-scroll environment. Location and appearance: Tiny Thai school electrical control room at night, caged ceiling light, grey breaker housing, shelves of fuses and spare parts, old wall cables and single tall steel locker. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 doorway frame; x420–570 CLOSED breaker-box housing, no exposed switches or readable labels; x640–760 spare-parts shelving; x790–880 tall locker.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 1 sequential panels of 1920×1080 pixels named assets/bg/control_1.jpg through assets/bg/control_1.jpg; world width is 900 units (render span ~1800 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — Public address room (`pa_room`)
+
+**Output:** `assets/bg/pa_room_1.jpg … pa_room_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1200; 2 px/world unit
+
+```text
+Create the master wide background for the Public address room level, continuous horizontal side-scroll environment. Location and appearance: Old school public-address / broadcast room at night, wooden desk holding vintage microphone, mixer body and reel/cassette deck, wall-mounted patch panel and horn loudspeaker, dim yellow desk lamp, flood-stained cream-green walls. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x120 entry frame; x260–370 tall empty MIRROR FRAME with no reflection; x470 empty clock patch; x480–760 microphone/mixer desk zone (functional knobs and microphone as overlays); x900–1100 EMPTY unlabeled patch panel / wiring zone.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/pa_room_1.jpg through assets/bg/pa_room_2.jpg; world width is 1200 units (render span ~2400 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+## 5. Flashback, sequel and ending backgrounds
+
+### Background — Flood evacuation flashback (`flashback`)
+
+**Output:** `assets/bg/flashback_1.jpg … flashback_1.jpg`    
+**Spec:** 1 × 1920×1080 JPG (quality 85+); world width 960; 2 px/world unit
+
+```text
+Create the master wide background for the Flood evacuation flashback level, continuous horizontal side-scroll environment. Location and appearance: A rainy night in the 2010 Thai flood disaster, rural primary school half-submerged in muddy brown river water, blurred searchlights in rain and a wooden rescue boat stationed at far right, urgency but NO visible faces or people. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): x0–700 school façade and floodwater; x700–960 wooden rescue boat silhouette, no passengers. Any rescuers appear as separately animated overlays. Source filename in the original plan is `flashback_1.jpg`. Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 1 sequential panels of 1920×1080 pixels named assets/bg/flashback_1.jpg through assets/bg/flashback_1.jpg; world width is 960 units (render span ~1920 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — City apartment, three months later (`city`)
+
+**Output:** `assets/bg/city_1.jpg … city_1.jpg`    
+**Spec:** 1 × 1920×1080 JPG (quality 85+); world width 960; 2 px/world unit
+
+```text
+Create the master wide background for the City apartment, three months later level, continuous horizontal side-scroll environment. Location and appearance: Small modest Thai city-apartment living room at night with rain-streaked window, soft out-of-focus city lights, tiny table, cassette tape player and unmarked parcel, unsettling but ordinary lived-in atmosphere. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): Table center-left; right wall has EMPTY full-length mirror frame, NO reflection. Cassette/parcel should be separate interactable objects.  Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 1 sequential panels of 1920×1080 pixels named assets/bg/city_1.jpg through assets/bg/city_1.jpg; world width is 960 units (render span ~1920 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+### Background — School gate at dawn — True Ending (`school_dawn`)
+
+**Output:** `assets/bg/school_dawn_1.jpg … school_dawn_2.jpg`    
+**Spec:** 2 × 1920×1080 JPG (quality 85+); world width 1600; 2 px/world unit
+
+```text
+Create the master wide background for the School gate at dawn — True Ending level, continuous horizontal side-scroll environment. Location and appearance: Exact same abandoned school gate and building as the approved `school_gate` art, now after rain at serene golden sunrise: clear open-looking gateway, puddles reflecting warm sky, gentle morning mist, melancholic calm. Required landmark layout in GAME WORLD units (render at 2 output pixels per world unit): Match `school_gate` building x160–1500 and entrance sign x1100–1350; keep geometry, waterline and layout completely unchanged; no children or characters painted in scene. Use the approved school-gate panorama as a mandatory image reference; game animates the real gate and character silhouettes separately. Keep doors, readable signs, changing text, clocks, interactive switches, dynamic reflections, enemies and collectibles as EMPTY PLACEHOLDERS or inactive architectural frames so the game engine can place interactive layers on top. Never include identifiable people. Plan one uninterrupted environment first, then EXTEND/OUTPAINT to the right using the prior image as locked reference. Cut the approved panorama into 2 sequential panels of 1920×1080 pixels named assets/bg/school_dawn_1.jpg through assets/bg/school_dawn_2.jpg; world width is 1600 units (render span ~3200 pixels), with unused right-edge overhang cropped by the engine. Each consecutive panel must match its neighbor in lighting, wall-floor height, scale, weather, lines and texture. Original Korean manhwa-inspired 2D side-scrolling psychological horror game background set in rural Thailand. Perfectly flat, front-facing orthographic side-elevation composition: camera squarely faces the back wall, level horizon, no vanishing point, no angled room perspective, no fisheye. Wall-floor boundary at 74% of image height; lower 26% is clear continuous walkable floor, with no foreground obstacle in the central path. Desaturated painted shading, crisp ink outlines, worn humid surfaces, controlled localized light, clean silhouettes, no humans, no readable lettering or numbers, no watermarks. The art should be suitable for seamless horizontal scrolling and engine overlays. Avoid: people, ghosts, silhouettes of people, printed words, letters, numbers, labels, clocks, readable signs, embedded UI, logos, watermark, dramatic perspective, tilted camera, 3D render, fisheye, blocked walkway, obvious panel seam.
+```
+
+## 6. Production sprite prompts (single-piece source art FIRST)
+
+Use the same approved character sheet as image reference for each. Do not request independently generated individual limbs as a shortcut to a functioning rig: anatomy and joint silhouettes frequently diverge. Build `full.png` first, manually segment it with deliberately overlapped hidden geometry, then export each piece at exactly the same original canvas dimensions and pixel origin.
+
+### Standard layer file list (Pakin, Daow, Teacher)
+
+```text
+assets/sprites/<character>/
+  full.png
+  head.png
+  torso.png
+  arm_back_upper.png
+  arm_back_lower.png
+  arm_front_upper.png
+  arm_front_lower.png
+  leg_back_upper.png
+  leg_back_lower.png
+  leg_front_upper.png
+  leg_front_lower.png
+  prop.png              (only when a detachable prop exists)
+```
+
+Joint hidden overlap target: ~15 pixels inside each parent shape at shoulder, elbow, hip and knee. Ensure limb masks are not cut flush through rotating joints. Back-limb layering: back leg → back arm → torso → front leg → front arm → head → foreground prop (adjust per animation). Direction reversal can mirror in engine, but lettering and distinctive asymmetric props/ribbons should be checked after flipping.
+
+### Sprite source — pakin
+
+**Output:** `assets/sprites/pakin/full.png`    
+**Spec:** PNG transparent; character height 400px; strict right profile; one character
+
+```text
+Create ONE standalone production-source 2D side-scrolling game sprite for pakin using their approved turnaround sheet as the exact image reference. Identity: Pakin is a 28-year-old Thai man, slim build, olive-brown skin, messy short black hair, tired dark eyes with under-eye circles, faint light stubble, guarded expression. He wears a worn dark olive waterproof rain jacket open over a plain grey T-shirt, charcoal dark jeans and muddy dark sneakers; a small utilitarian metal flashlight is his primary prop. Slightly rain-soaked clothing, modest realistic proportions. Strict 90-degree SIDE PROFILE facing image-right, full body visible from top of hair to bottom of shoes; neutral slightly relaxed reference stance, vertical torso, both legs distinct and slightly separated, both arms a short distance away from torso so all four limbs can be traced and separated. Do NOT pose for action, walk, attack or gesture; do NOT crop. Avoid occlusion at shoulders, elbows, hips, knees, wrists, ankles. Keep silhouette suitable for later cutout-puppet segmentation. The metal flashlight may be held only if it can clearly be extracted as a detachable prop; ideally render a clean hand and add flashlight as a separate game sprite. Export target height 400 pixels for the character inside a larger transparent RGBA canvas, with generous clean margins; preserve alpha edges and consistent canvas origin. Not a turnaround, not a sheet, not an animation sequence, not multiple sprites. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Sprite source — daow
+
+**Output:** `assets/sprites/daow/full.png`    
+**Spec:** PNG transparent; character height 270px; strict right profile; one character
+
+```text
+Create ONE standalone production-source 2D side-scrolling game sprite for daow using their approved turnaround sheet as the exact image reference. Identity: Daow is a 9-year-old Thai girl, with a round gentle youthful face, short straight black bob, a bright sky-blue ribbon tied on the LEFT side of her hair, and an authentic Thai primary-school uniform: white short-sleeved blouse with sailor-style collar and navy pleated skirt; white socks and black school shoes. She carries a small silver bicycle bell. Clothes and hair are faintly wet; no adult styling. Strict 90-degree SIDE PROFILE facing image-right, full body visible from top of hair to bottom of shoes; neutral slightly relaxed reference stance, vertical torso, both legs distinct and slightly separated, both arms a short distance away from torso so all four limbs can be traced and separated. Do NOT pose for action, walk, attack or gesture; do NOT crop. Avoid occlusion at shoulders, elbows, hips, knees, wrists, ankles. Keep silhouette suitable for later cutout-puppet segmentation. Sky-blue ribbon must remain on the left side of the child’s head; bicycle bell may be a separate detachable prop. Export target height 270 pixels for the character inside a larger transparent RGBA canvas, with generous clean margins; preserve alpha edges and consistent canvas origin. Not a turnaround, not a sheet, not an animation sequence, not multiple sprites. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Sprite source — teacher
+
+**Output:** `assets/sprites/teacher/full.png`    
+**Spec:** PNG transparent; character height 540px; strict right profile; one character
+
+```text
+Create ONE standalone production-source 2D side-scrolling game sprite for teacher using their approved turnaround sheet as the exact image reference. Identity: The Duty Teacher is a tall, unnaturally thin Thai female schoolteacher ghost, an altered form of Teacher Ratree: disproportionately long neck and arms, soaked straight black hair masking most of her face with ONE pale eye visible, tired and sorrowful as well as threatening. She wears an aged khaki-beige Thai government-teacher blouse with shoulder boards and a LONG DARK STRAIGHT SKIRT, dark low heels, and hugs a thick red-brown school attendance register. Water drips from the hems. Never replace her Thai teacher uniform with a dress or nurse outfit. Strict 90-degree SIDE PROFILE facing image-right, full body visible from top of hair to bottom of shoes; neutral slightly relaxed reference stance, vertical torso, both legs distinct and slightly separated, both arms a short distance away from torso so all four limbs can be traced and separated. Do NOT pose for action, walk, attack or gesture; do NOT crop. Avoid occlusion at shoulders, elbows, hips, knees, wrists, ankles. Keep silhouette suitable for later cutout-puppet segmentation. Horrific anatomy appears in elongated neck/arms, but each joint must remain identifiable for rigging; the attendance register should be a separate prop if possible. Export target height 540 pixels for the character inside a larger transparent RGBA canvas, with generous clean margins; preserve alpha edges and consistent canvas origin. Not a turnaround, not a sheet, not an animation sequence, not multiple sprites. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+### Sprite source — nameless
+
+**Output:** `assets/sprites/nameless/full.png`    
+**Spec:** PNG transparent; character height 620px; strict right profile; one character
+
+```text
+Create ONE standalone production-source 2D side-scrolling game sprite for nameless using their approved turnaround sheet as the exact image reference. Identity: The Nameless is an exceptionally tall faceless shadow being, black and graphite grey only, smooth featureless head, body formed from overlapping translucent human silhouettes of different heights, elongated fingers, smoke-like dissolving edges, threatening but non-gory. Its silhouette is distinct from the Duty Teacher. Strict 90-degree SIDE PROFILE facing image-right, full body visible from top of hair to bottom of shoes; neutral slightly relaxed reference stance, vertical torso, both legs distinct and slightly separated, both arms a short distance away from torso so all four limbs can be traced and separated. Do NOT pose for action, walk, attack or gesture; do NOT crop. Avoid occlusion at shoulders, elbows, hips, knees, wrists, ankles. Keep silhouette suitable for later cutout-puppet segmentation. Treat limbs as broad overlapping shadow shapes with identifiable sections; softer alpha at wispy edges, but preserve opaque core for clean cutout masks. Export target height 620 pixels for the character inside a larger transparent RGBA canvas, with generous clean margins; preserve alpha edges and consistent canvas origin. Not a turnaround, not a sheet, not an animation sequence, not multiple sprites. Original Korean manhwa-inspired psychological horror game illustration; clean expressive black ink linework with varied line weight; deliberate cel shading with restrained soft painted gradients; semi-realistic anatomy; muted desaturated charcoal, olive, cold blue-grey and khaki palette; subtle weathering and paper-grain texture confined to painted surfaces; coherent production-ready 2D game art, original character design. Avoid: collage, multiple emotional variants in one export, title cards, labels, typography, captions, logo, watermark, cropped head, cropped shoes, extra people, mismatched costume, inconsistent facial features, missing limbs, extra fingers, 3D rendering, photorealism, blurry edges, painted background.
+```
+
+## 7. Optional key art and ending stills
+
+These are single finished cinematic illustrations, NOT orthographic gameplay backgrounds and NOT transparent dialogue portraits. Put typography and title in the game engine / layout tool rather than trusting the image model to render words correctly.
+
+### title.jpg
+
+**Output:** `assets/art/title.jpg`    
+**Spec:** 1920×1080 JPG; 16:9
+
+```text
+Create exactly ONE original 16:9 cinematic 2D key illustration for the psychological horror game The Last Announcement. Rainy nighttime artwork: Pakin is on the left in worn dark olive rain jacket and grey shirt, gripping a metal flashlight and glancing behind fearfully; Daow stands on the right in Thai white sailor-collar school uniform and navy skirt, blue ribbon on the LEFT of her short black bob, holding a tiny silver bicycle bell. Behind them tower a rusted rural Thai horn loudspeaker and the separate gigantic faceless Nameless shadow. Background of dark-green school-chalkboard textures and stained concrete. Leave generous dark NEGATIVE SPACE at the center-bottom for a title to be added later. Korean manhwa-inspired horror illustration, bold elegant ink linework, semi-realistic original Thai characters, controlled cel shading and painted gradients, restrained desaturated palette, dramatic readable silhouettes, filmic composition, visible story emotion, high detail, no logos, no typography, no captions, no watermarks, no collage, no recognizable third-party game characters. The image is a final still illustration, not a sprite sheet. Target export 1920×1080 JPG; check size after generation.
+```
+
+### end_a.jpg
+
+**Output:** `assets/art/end_a.jpg`    
+**Spec:** 1920×1080 JPG; 16:9
+
+```text
+Create exactly ONE original 16:9 cinematic 2D key illustration for the psychological horror game The Last Announcement. Bad Ending: old deserted school PA room under desaturated grey dawn; a framed image of Pakin as the new announcer hangs on the wall, while the pane or mirror reflection shows a blank faceless version of him. He retains the exact recognizable short messy black hair and worn olive jacket. Chilling stillness, no text labels. Korean manhwa-inspired horror illustration, bold elegant ink linework, semi-realistic original Thai characters, controlled cel shading and painted gradients, restrained desaturated palette, dramatic readable silhouettes, filmic composition, visible story emotion, high detail, no logos, no typography, no captions, no watermarks, no collage, no recognizable third-party game characters. The image is a final still illustration, not a sprite sheet. Target export 1920×1080 JPG; check size after generation.
+```
+
+### end_b.jpg
+
+**Output:** `assets/art/end_b.jpg`    
+**Spec:** 1920×1080 JPG; 16:9
+
+```text
+Create exactly ONE original 16:9 cinematic 2D key illustration for the psychological horror game The Last Announcement. Neutral Ending: Pakin sits alone in a modest Thai city apartment at rainy night, still wearing the same olive jacket, holding an old cassette tape in tense disbelief; behind him an empty-looking tall mirror reflects the faint small wet-haired silhouette of Daow. Her blue ribbon can be nearly imperceptible. Melancholy, cold apartment lighting, dread without gore. Korean manhwa-inspired horror illustration, bold elegant ink linework, semi-realistic original Thai characters, controlled cel shading and painted gradients, restrained desaturated palette, dramatic readable silhouettes, filmic composition, visible story emotion, high detail, no logos, no typography, no captions, no watermarks, no collage, no recognizable third-party game characters. The image is a final still illustration, not a sprite sheet. Target export 1920×1080 JPG; check size after generation.
+```
+
+### end_c.jpg
+
+**Output:** `assets/art/end_c.jpg`    
+**Spec:** 1920×1080 JPG; 16:9
+
+```text
+Create exactly ONE original 16:9 cinematic 2D key illustration for the psychological horror game The Last Announcement. True Ending: warm golden sunrise at the approved old two-storey Thai school gate; Daow, visibly the same nine-year-old girl with sky-blue ribbon and white/navy uniform, smiles and waves farewell while distant softly lit child silhouettes walk into the morning light; Pakin watches from behind in his olive jacket, relieved yet grieving. Emotionally hopeful, graceful, not a jumpscare. Korean manhwa-inspired horror illustration, bold elegant ink linework, semi-realistic original Thai characters, controlled cel shading and painted gradients, restrained desaturated palette, dramatic readable silhouettes, filmic composition, visible story emotion, high detail, no logos, no typography, no captions, no watermarks, no collage, no recognizable third-party game characters. The image is a final still illustration, not a sprite sheet. Target export 1920×1080 JPG; check size after generation.
+```
+
+## 8. Generator instructions: exactly how to run prompts
+
+### Character sheet workflow
+
+1. Paste ONE prompt from Section 1 and generate the individual sheet.
+2. Confirm age, identity, skin, hair, uniform, side and back consistency. Correct only that character until approved.
+3. Save as `concept/<character>_sheet.png` and use as a **visual input reference** in every Section 2 portrait and Section 6 sprite generation.
+4. Generate `*_neutral.png` portraits first. Once they match the sheet, render each additional emotion separately with the neutral portrait as a second reference.
+5. Check portrait alpha and size; produce genuinely isolated PNGs (transparent background is not equivalent to a checkerboard printed as pixels).
+
+### Background workflow
+
+1. Create a quick geometry mockup of each room with wall-floor boundary at 74% and a reserved walk lane.
+2. Produce a master first panel at 1920×1080 from one of the Section 3–5 prompts.
+3. Feed panel 1 into an **extend-right/outpaint** operation to form panel 2, panel 2 into panel 3, with SAME geometry and seam pixels preserved.
+4. Apply deterministic stitching and cut every 1920px. Verify final world room boundaries (`room_world_width * 2` output pixels) and trim the extra end pixels in-game.
+5. Build interactables, actors, floodwater and changing text as separate engine layers.
+
+### Sprite workflow
+
+1. Generate `full.png` strict side profile using approved character sheet.
+2. Redraw concealed joint overlaps if required; separate body pieces carefully in a raster editor (Krita, Photoshop or Photopea).
+3. Export all segment PNGs at the **same dimensions and original origin**; preserve RGBA alpha.
+4. Test limb pivots using an animation rig, including elbows/knees when bent 45° and 90°. Repair exposed holes and overlapping texture.
+
+## 9. Acceptance tests before import
+
+- [ ] Every file exists under the EXACT path and uses lowercase English `snake_case`.
+- [ ] Character identity matches approved sheet: costume, colors, hair, age, proportions, accessories.
+- [ ] Portrait dimensions exactly `800×1000`, actual transparent pixels outside subject; isolated one character.
+- [ ] Gameplay backgrounds exactly `1920×1080` each; top of walkable floor at y≈799px consistently.
+- [ ] Floor lane visually clear and walkable; no unintended clipping/occlusion.
+- [ ] Consecutive panels have continuous wall/floor, light, architectural lines and textures at the seam.
+- [ ] School interiors all share wall palette, flood-line language and building scale.
+- [ ] No baked-in mutable text, clocks, mirror reflections, menu UI, interaction states or NPCs.
+- [ ] Sprite source height matches target: Pakin 400px, Daow 270px, Teacher 540px, Nameless 620px.
+- [ ] Every puppet limb layer uses identical canvas dimensions and position origin.
+- [ ] Joints visually work at the required animation angles; no holes revealed.
+- [ ] End-art and title exports have target 1920×1080 and a clean composition.
+
+## 10. File manifest (planned outputs)
+
+```text
+concept/
+  pakin_sheet.png
+  daow_sheet.png
+  mom_sheet.png
+  duty_teacher_sheet.png
+  teacher_ratree_sheet.png
+assets/
+  portraits/
+    pakin_neutral.png pakin_scared.png pakin_sad.png pakin_eerie.png
+    daow_neutral.png daow_sad.png daow_happy.png daow_eerie.png
+    mom_neutral.png mom_sad.png
+    teacher_neutral.png teacher_eerie.png
+    ratree_neutral.png ratree_happy.png
+  bg/
+    road_1.jpg road_2.jpg road_3.jpg
+    sala_1.jpg sala_2.jpg
+    sala_morning_1.jpg sala_morning_2.jpg
+    street_1.jpg street_2.jpg
+    living_1.jpg living_2.jpg
+    hall2_1.jpg hall2_2.jpg
+    mom_room_1.jpg mom_room_2.jpg
+    daow_room_1.jpg daow_room_2.jpg
+    school_gate_1.jpg school_gate_2.jpg
+    hall1_1.jpg hall1_2.jpg hall1_3.jpg
+    p3_1.jpg p3_2.jpg
+    hall2s_1.jpg hall2s_2.jpg hall2s_3.jpg
+    library_1.jpg library_2.jpg
+    nurse_1.jpg nurse_2.jpg
+    archive_1.jpg archive_2.jpg
+    bridge_1.jpg bridge_2.jpg
+    control_1.jpg
+    pa_room_1.jpg pa_room_2.jpg
+    flashback_1.jpg
+    city_1.jpg
+    school_dawn_1.jpg school_dawn_2.jpg
+  sprites/
+    pakin/     full.png + segmented rig layers
+    daow/      full.png + segmented rig layers
+    teacher/   full.png + segmented rig layers
+    nameless/  full.png + reduced/segmented rig layers
+  art/
+    title.jpg
+    end_a.jpg
+    end_b.jpg
+    end_c.jpg
+```
+
+**Recommended order:** approve 3 primary turnaround sheets (Pakin, Daow, Duty Teacher) → all neutral portraits → supporting portraits and expressions → Part 1 backgrounds → engine scale/scroll test → Part 2 backgrounds → rigged sprites → end/key art.
+
+**Do not treat character sheets or this document as completed exported game assets.** Generation and technical slicing/QA remain separate steps.

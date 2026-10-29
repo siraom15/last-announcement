@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\library_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-7f61d975-7828-4e88-a9a2-3aab3d96c155.png",
+  "source_size": [
+    2089,
+    753
+  ],
+  "size": [
+    3000,
+    1080
+  ],
+  "files": [
+    "library_1.jpg",
+    "library_2.jpg"
+  ],
+  "unused_right_padding": 840,
+  "floor_y": null,
+  "align_floor": 0.661
+}

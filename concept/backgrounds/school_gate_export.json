@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\school_gate_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-687e0fa9-68e6-4688-b253-823ff8475d04.png",
+  "source_size": [
+    2158,
+    729
+  ],
+  "size": [
+    3200,
+    1080
+  ],
+  "files": [
+    "school_gate_1.jpg",
+    "school_gate_2.jpg"
+  ],
+  "unused_right_padding": 640,
+  "floor_y": null,
+  "align_floor": null
+}

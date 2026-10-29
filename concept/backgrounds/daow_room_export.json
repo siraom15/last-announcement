@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\daow_room_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-089f9cd1-e9ea-4a48-9d17-c68e9e59a162.png",
+  "source_size": [
+    1706,
+    922
+  ],
+  "size": [
+    2000,
+    1080
+  ],
+  "files": [
+    "daow_room_1.jpg",
+    "daow_room_2.jpg"
+  ],
+  "unused_right_padding": 1840,
+  "floor_y": null,
+  "align_floor": null
+}

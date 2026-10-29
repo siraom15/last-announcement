@@ -10,6 +10,7 @@ const f = (k) => !!(G.S && G.S.flags[k]);
 
 // ── shared dynamic helpers ──────────────────────────────────────────
 function rainGlass(ctx, rects, t) {
+  if (G.room.painted || !rects) return; // painted art already shows the rain outside
   for (const [x, y, w, h] of rects) {
     ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
     ctx.strokeStyle = 'rgba(150,170,190,.22)'; ctx.lineWidth = 1;
@@ -43,6 +44,11 @@ export function kidsInRoom(ctx, t) {
   }
 }
 
+// Fixtures as they sit in the painted backgrounds (world units: 1 unit = 2 px of the 1920×1080 panels)
+const GATE_WINDOWS = [46, 225, 404, 590, 768, 947].map((x) => [x, 100, 130, 78]);
+const LIB_MIRROR = [1315, 170, 110, 220];
+const PA_MIRROR = [205, 148, 110, 183];
+
 // ── rooms ──────────────────────────────────────────────────────────
 const ROOMS = {
   road: {
@@ -54,8 +60,9 @@ const ROOMS = {
       P.pole(ctx, 760, { horns: 0, w: 1 }); P.pole(ctx, 1560, { horns: 0, w: 1 });
       P.floorRoad(ctx, w); P.villageSign(ctx, 1080); P.car(ctx, 120, { lights: true });
     },
-    fg(ctx) { P.fallenTree(ctx, 660); },
+    fg(ctx) { if (!this.painted) P.fallenTree(ctx, 660); },
     dyn(ctx, t) {
+      if (this.painted) P.car(ctx, 120, { lights: true });
       if (f('handprint')) { ctx.fillStyle = 'rgba(200,210,220,.25)'; for (const [dx, dy] of [[0, 0], [7, -9], [13, -11], [19, -9], [24, -3]]) { ctx.beginPath(); ctx.ellipse(270 + dx, 364 + dy, 2.5, 6, 0, 0, 7); ctx.fill(); } ctx.beginPath(); ctx.ellipse(282, 378, 10, 9, 0, 0, 7); ctx.fill(); }
     },
     lights: () => [{ x: 470, y: 420, r: f('headlights') ? 520 : 140, i: f('headlights') ? 0.95 : 0.35, c: '255,240,200', sy: 0.5 }],
@@ -107,7 +114,7 @@ const ROOMS = {
     dyn(ctx, t) { if (S().part === 1 && f('p1end')) { /* path lit to school */ } },
     lights: (t) => [{ x: 440, y: 205, r: 160, i: f('blackout') ? 0 : 0.5 * flick(t, 5, 0.1), c: '255,200,130' }, { x: 1000, y: 150, r: 240, i: 0.35, c: '180,200,255' }],
     left: { to: 'sala', x: 1720 }, right: { to: 'school_gate', x: 80, lock: 'toSchool' },
-    objs: [{ id: 'houseDoor', x: 440, kind: 'door', name: 'บ้านแม่', verb: 'เข้าบ้าน', to: 'living', toX: 160, lock: 'houseDoor' }],
+    objs: [{ id: 'houseDoor', x: 470, kind: 'door', name: 'บ้านแม่', verb: 'เข้าบ้าน', to: 'living', toX: 90, lock: 'houseDoor' }],
   },
 
   living: {
@@ -123,7 +130,7 @@ const ROOMS = {
     },
     dyn(ctx, t) {
       clockNow(ctx, 360, 150); rainGlass(ctx, this.wins, t);
-      if (f('plugged')) { ctx.strokeStyle = '#111'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(990, WB - 40); ctx.quadraticCurveTo(1010, WB + 40, 1040, WB + 26); ctx.stroke(); }
+      if (f('plugged')) { ctx.strokeStyle = '#111'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(945, WB - 40); ctx.quadraticCurveTo(960, WB + 30, 985, WB + 26); ctx.stroke(); }
     },
     lights: (t) => [
       { x: 640, y: 50, r: 330, i: f('blackout') ? 0 : (f('clock317') ? 0.6 * flick(t, 1, 0.5) : 0.55 * flick(t, 1, 0.05)), c: '255,200,140' },
@@ -131,12 +138,12 @@ const ROOMS = {
       { x: 940, y: WB - 60, r: 90, i: f('tapePlaying') ? 0.5 : 0, c: '255,120,80' },
     ],
     objs: [
-      { id: 'front', x: 160, kind: 'door', name: 'ประตูหน้าบ้าน', verb: 'ออกจากบ้าน', to: 'street', toX: 440, lock: 'frontDoor' },
+      { id: 'front', x: 90, kind: 'door', name: 'ประตูหน้าบ้าน', verb: 'ออกจากบ้าน', to: 'street', toX: 470, lock: 'frontDoor' },
       { id: 'clock', x: 360, kind: 'use', name: 'นาฬิกาแขวน', verb: 'ดู', act: 'livClock' },
-      { id: 'photos', x: 820, kind: 'use', name: 'รูปถ่ายครอบครัว', verb: 'ดู', act: 'livPhotos' },
-      { id: 'tape', x: 945, kind: 'use', name: 'เครื่องเล่นเทปของแม่', verb: 'กด PLAY', act: 'tapeM01', show: () => !f('m01') },
-      { id: 'plug', x: 1050, kind: 'use', name: 'ปลั๊กพ่วง', verb: 'เสียบปลั๊ก', act: 'plug', show: () => !f('plugged') },
-      { id: 'up', x: 1170, kind: 'door', name: 'บันไดขึ้นชั้น 2', verb: 'ขึ้นบันได', to: 'hall2', toX: 170, lock: 'upstairs', sfx: 'stairs' },
+      { id: 'photos', x: 760, kind: 'use', name: 'รูปถ่ายครอบครัว', verb: 'ดู', act: 'livPhotos' },
+      { id: 'tape', x: 880, kind: 'use', name: 'เครื่องเล่นเทปของแม่', verb: 'กด PLAY', act: 'tapeM01', show: () => !f('m01') },
+      { id: 'plug', x: 975, kind: 'use', name: 'ปลั๊กพ่วง', verb: 'เสียบปลั๊ก', act: 'plug', show: () => !f('plugged') },
+      { id: 'up', x: 1170, kind: 'door', name: 'บันไดขึ้นชั้น 2', verb: 'ขึ้นบันได', to: 'hall2', toX: 150, lock: 'upstairs', sfx: 'stairs' },
     ],
   },
 
@@ -152,9 +159,9 @@ const ROOMS = {
     dyn(ctx, t) { rainGlass(ctx, this.wins, t); },
     lights: () => [{ x: 1010, y: 185, r: 170, i: 0.3, c: '150,175,210' }],
     objs: [
-      { id: 'down', x: 150, kind: 'door', name: 'บันไดลงชั้นล่าง', verb: 'ลงบันได', to: 'living', toX: 1150, sfx: 'stairs' },
-      { id: 'mom', x: 520, kind: 'door', name: 'ห้องแม่', verb: 'เข้าห้อง', to: 'mom_room', toX: 120 },
-      { id: 'daow', x: 820, kind: 'door', name: 'ห้องดาว', verb: 'เข้าห้อง', to: 'daow_room', toX: 120 },
+      { id: 'down', x: 150, kind: 'door', name: 'บันไดลงชั้นล่าง', verb: 'ลงบันได', to: 'living', toX: 1170, sfx: 'stairs' },
+      { id: 'mom', x: 500, kind: 'door', name: 'ห้องแม่', verb: 'เข้าห้อง', to: 'mom_room', toX: 120 },
+      { id: 'daow', x: 770, kind: 'door', name: 'ห้องดาว', verb: 'เข้าห้อง', to: 'daow_room', toX: 120 },
     ],
   },
 
@@ -175,8 +182,8 @@ const ROOMS = {
     dyn(ctx) { if (f('boxOpen')) { ctx.fillStyle = '#1a1209'; ctx.fillRect(860, WB - 122, 60, 12); } },
     lights: () => [{ x: 650, y: 80, r: 260, i: 0.35, c: '220,190,150' }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2', toX: 520 },
-      { id: 'hide', x: 290, kind: 'hide', name: 'ตู้เสื้อผ้า', verb: 'ซ่อน' },
+      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2', toX: 500 },
+      { id: 'hide', x: 340, kind: 'hide', name: 'ตู้เสื้อผ้า', verb: 'ซ่อน' },
       { id: 'photo', x: 510, kind: 'use', name: 'ภาพถ่าย', verb: 'ดู', act: 'momPhoto' },
       { id: 'cal', x: 650, kind: 'use', name: 'ปฏิทิน', verb: 'ดู', act: 'calendar' },
       { id: 'note', x: 780, kind: 'use', name: 'บันทึกของแม่', verb: 'อ่าน', act: 'momNote' },
@@ -197,15 +204,15 @@ const ROOMS = {
     dyn(ctx) {
       P.familyDrawing(ctx, 370, 240, true);
       if (f('drawText')) P.textOn(ctx, 'คนที่ไม่ถูกเรียก จะยังอยู่ที่นี่', 440, 140, { size: 15, col: 'rgba(230,225,210,.85)', font: '"Noto Serif Thai", serif' });
-      if (!S().inv.bell) { ctx.fillStyle = '#c0c4c8'; ctx.beginPath(); ctx.arc(895, WB - 92, 7, Math.PI, 0); ctx.fill(); ctx.fillRect(887, WB - 92, 16, 3); }
+      if (!S().inv.bell) { ctx.fillStyle = '#c0c4c8'; ctx.beginPath(); ctx.arc(880, WB - 92, 7, Math.PI, 0); ctx.fill(); ctx.fillRect(872, WB - 92, 16, 3); }
     },
-    lights: () => [{ x: 900, y: WB - 92, r: 60, i: S().inv.bell ? 0 : 0.35, c: '180,200,230' }, { x: 440, y: 180, r: 200, i: 0.2, c: '170,180,200' }],
+    lights: () => [{ x: 880, y: WB - 92, r: 60, i: S().inv.bell ? 0 : 0.35, c: '180,200,230' }, { x: 440, y: 180, r: 200, i: 0.2, c: '170,180,200' }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2', toX: 820 },
+      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2', toX: 770 },
       { id: 'draw', x: 440, kind: 'use', name: 'ภาพวาดบนผนัง', verb: 'ดู', act: 'drawing' },
-      { id: 'tag', x: 765, kind: 'use', name: 'ป้ายชื่อกระเป๋า', verb: 'อ่าน', act: 'bagTag' },
-      { id: 'bell', x: 895, kind: 'use', name: 'กระดิ่งจักรยาน', verb: 'เก็บ', act: 'bell', show: () => !S().inv.bell },
-      { id: 'behind', x: 940, kind: 'use', name: 'หลังโต๊ะ', verb: 'ดู', act: 'behindDesk', show: () => S().inv.bell && !f('behindDesk') },
+      { id: 'tag', x: 730, kind: 'use', name: 'ป้ายชื่อกระเป๋า', verb: 'อ่าน', act: 'bagTag' },
+      { id: 'bell', x: 880, kind: 'use', name: 'กระดิ่งจักรยาน', verb: 'เก็บ', act: 'bell', show: () => !S().inv.bell },
+      { id: 'behind', x: 960, kind: 'use', name: 'หลังโต๊ะ', verb: 'ดู', act: 'behindDesk', show: () => S().inv.bell && !f('behindDesk') },
     ],
   },
 
@@ -217,11 +224,11 @@ const ROOMS = {
       P.nightSky(ctx, w); this.wins = P.schoolFacade(ctx, 160, 1340); P.floorRoad(ctx, w); P.gate(ctx, 1100);
     },
     dyn(ctx, t) {
-      if (G.fx.kids > 0) for (const [x, y, ww, hh] of this.wins) { ctx.save(); ctx.globalAlpha = G.fx.kids; drawChar(ctx, 'kid', x + ww / 2, y + hh + 2, { h: 70, rim: false, alpha: 0.9 }); ctx.restore(); }
+      if (G.fx.kids > 0) for (const [x, y, ww, hh] of (this.painted ? GATE_WINDOWS : this.wins)) { ctx.save(); ctx.globalAlpha = G.fx.kids; drawChar(ctx, 'kid', x + ww / 2, y + hh + 2, { h: 70, rim: false, alpha: 0.9 }); ctx.restore(); }
     },
     lights: (t) => [{ x: 1225, y: 150, r: 200, i: 0.3 * flick(t, 9, 0.3), c: '200,210,180' }],
     left: { to: 'street', x: 1420 },
-    objs: [{ id: 'gate', x: 1225, kind: 'door', name: 'ประตูโรงเรียน', verb: 'ไขกุญแจ', to: 'hall1', toX: 170, lock: 'gate', sfx: 'metal' }],
+    objs: [{ id: 'gate', x: 1320, kind: 'door', name: 'ประตูโรงเรียน', verb: 'ไขกุญแจ', to: 'hall1', toX: 120, lock: 'gate', sfx: 'metal' }],
   },
 
   hall1: {
@@ -236,18 +243,18 @@ const ROOMS = {
       P.textOn(ctx, 'ความรู้คู่คุณธรรม', 1100, 70, { size: 20, col: 'rgba(200,190,150,.5)', font: '"Noto Serif Thai", serif' });
       for (const x of [400, 900, 1400, 1900]) P.fluoFixture(ctx, x);
     },
-    dyn(ctx, t) { clockNow(ctx, 1110, 150, 22); rainGlass(ctx, this.wins, t); exitSign(ctx, 1450, 120); exitSign(ctx, 1990, 60); },
+    dyn(ctx, t) { clockNow(ctx, 1335, 130, 20); rainGlass(ctx, this.wins, t); exitSign(ctx, 1640, 120); exitSign(ctx, 2040, 60); },
     lights: (t) => [
       { x: 400, y: 56, r: 300, i: 0.5 * flick(t, 1, 0.4), c: '210,230,210', sy: 0.8 }, { x: 1400, y: 56, r: 300, i: 0.45 * flick(t, 3, 0.6), c: '210,230,210', sy: 0.8 },
-      { x: 1450, y: 130, r: 110, i: f('chase') ? 0.8 : 0.3, c: '80,255,140' }, { x: 1990, y: 70, r: 110, i: f('chase') ? 0.8 : 0.3, c: '80,255,140' },
+      { x: 1640, y: 130, r: 110, i: f('chase') ? 0.8 : 0.3, c: '80,255,140' }, { x: 2040, y: 70, r: 110, i: f('chase') ? 0.8 : 0.3, c: '80,255,140' },
     ],
     objs: [
-      { id: 'out', x: 170, kind: 'door', name: 'ประตูทางออก', verb: 'ออกไปข้างนอก', to: 'school_gate', toX: 1225, lock: 'leaveSchool', sfx: 'metal' },
-      { id: 'p3', x: 600, kind: 'door', name: 'ห้อง ป.3', verb: 'เข้าห้อง', to: 'p3', toX: 120 },
-      { id: 'board', x: 855, kind: 'use', name: 'บอร์ดประกาศ', verb: 'อ่าน', act: 'hallBoard' },
-      { id: 'lock', x: 1095, kind: 'hide', name: 'ตู้ล็อกเกอร์', verb: 'ซ่อน' },
-      { id: 'nurse', x: 1450, kind: 'door', name: 'ห้องพยาบาล', verb: 'เข้าห้อง', to: 'nurse', toX: 120 },
-      { id: 'up', x: 1990, kind: 'door', name: 'บันไดขึ้นชั้น 2', verb: 'ขึ้นบันได', to: 'hall2s', toX: 170, sfx: 'stairs', lock: 'schoolUp' },
+      { id: 'out', x: 120, kind: 'door', name: 'ประตูทางออก', verb: 'ออกไปข้างนอก', to: 'school_gate', toX: 1320, lock: 'leaveSchool', sfx: 'metal' },
+      { id: 'p3', x: 600, kind: 'door', name: 'ห้อง ป.3', verb: 'เข้าห้อง', to: 'p3', toX: 100 },
+      { id: 'board', x: 830, kind: 'use', name: 'บอร์ดประกาศ', verb: 'อ่าน', act: 'hallBoard' },
+      { id: 'lock', x: 1145, kind: 'hide', name: 'ตู้ล็อกเกอร์', verb: 'ซ่อน' },
+      { id: 'nurse', x: 1640, kind: 'door', name: 'ห้องพยาบาล', verb: 'เข้าห้อง', to: 'nurse', toX: 90 },
+      { id: 'up', x: 2040, kind: 'door', name: 'บันไดขึ้นชั้น 2', verb: 'ขึ้นบันได', to: 'hall2s', toX: 110, sfx: 'stairs', lock: 'schoolUp' },
     ],
   },
 
@@ -261,23 +268,24 @@ const ROOMS = {
       P.table(ctx, 1080, { w: 190, h: 86, top: '#5a4028' }); P.paper(ctx, 1110, WB - 106, 40, 12, 0.05);
       for (let i = 0; i < 8; i++) { P.chair(ctx, 300 + i * 105, WB + 18, 0.72); P.studentDesk(ctx, 290 + i * 105, WB + 18, 0.75, String(17 + i).padStart(2, '0')); }
     },
-    fg(ctx) { for (let i = 0; i < 8; i++) P.studentDesk(ctx, 240 + i * 112, WB + 128, 1.12, String(1 + i).padStart(2, '0')); },
+    fg(ctx) { if (!this.painted) for (let i = 0; i < 8; i++) P.studentDesk(ctx, 240 + i * 112, WB + 128, 1.12, String(1 + i).padStart(2, '0')); },
     dyn(ctx, t) {
-      clockNow(ctx, 330, 110, 22); rainGlass(ctx, this.wins, t);
-      P.textOn(ctx, 'วันนี้มีนักเรียนมาเรียน', 700, 160, { size: 22, col: 'rgba(235,235,225,.8)', font: '"Noto Serif Thai", serif' });
+      clockNow(ctx, 560, 120, 20); rainGlass(ctx, this.wins, t);
+      const bx = this.painted ? 670 : 700, by = this.painted ? 55 : 0;
+      P.textOn(ctx, 'วันนี้มีนักเรียนมาเรียน', bx, 160 + by, { size: 22, col: 'rgba(235,235,225,.8)', font: '"Noto Serif Thai", serif' });
       const n = f('board23') ? '23' : '22';
-      P.textOn(ctx, n + ' คน', 760, 212, { size: 34, col: f('board23') ? 'rgba(240,240,240,.95)' : 'rgba(235,235,225,.8)', font: '"Noto Serif Thai", serif' });
-      for (let i = 0; i < 8; i++) P.studentDesk(ctx, 270 + i * 108, WB + 62, 0.92, String(9 + i).padStart(2, '0'));
-      if (G.fx.chalkHand > 0) { ctx.fillStyle = `rgba(230,230,230,${G.fx.chalkHand})`; ctx.fillRect(812 + Math.sin(t * 30) * 6, 190 + Math.cos(t * 23) * 6, 6, 3); }
+      P.textOn(ctx, n + ' คน', bx + 60, 212 + by, { size: 34, col: f('board23') ? 'rgba(240,240,240,.95)' : 'rgba(235,235,225,.8)', font: '"Noto Serif Thai", serif' });
+      if (!this.painted) for (let i = 0; i < 8; i++) P.studentDesk(ctx, 270 + i * 108, WB + 62, 0.92, String(9 + i).padStart(2, '0'));
+      if (G.fx.chalkHand > 0) { ctx.fillStyle = `rgba(230,230,230,${G.fx.chalkHand})`; ctx.fillRect(bx + 112 + Math.sin(t * 30) * 6, 190 + by + Math.cos(t * 23) * 6, 6, 3); }
     },
     lights: (t) => [{ x: 740, y: 60, r: 340, i: 0.4 * flick(t, 4, 0.5), c: '200,225,205', sy: 0.8 }, { x: 1150, y: 185, r: 160, i: 0.25, c: '150,170,200' }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 1', verb: 'ออกจากห้อง', to: 'hall1', toX: 600 },
-      { id: 'tags', x: 470, kind: 'use', name: 'ป้ายชื่อบนโต๊ะ', verb: 'ตรวจดู', act: 'deskTags' },
-      { id: 'board', x: 740, kind: 'use', name: 'กระดานดำ', verb: 'ดู', act: 'chalkboard' },
-      { id: 'drawer', x: 1130, kind: 'use', name: 'ลิ้นชักโต๊ะครู', verb: 'ค้น', act: 'drawer' },
-      { id: 'hide', x: 1230, kind: 'hide', name: 'ใต้โต๊ะครู', verb: 'ซ่อน' },
-      { id: 'activity', x: 1375, kind: 'use', name: 'บอร์ดกิจกรรม', verb: 'ดู', act: 'activityBoard' },
+      { id: 'out', x: 100, kind: 'door', name: 'โถงชั้น 1', verb: 'ออกจากห้อง', to: 'hall1', toX: 600 },
+      { id: 'tags', x: 420, kind: 'use', name: 'ป้ายชื่อบนโต๊ะ', verb: 'ตรวจดู', act: 'deskTags' },
+      { id: 'board', x: 670, kind: 'use', name: 'กระดานดำ', verb: 'ดู', act: 'chalkboard' },
+      { id: 'drawer', x: 880, kind: 'use', name: 'ลิ้นชักโต๊ะครู', verb: 'ค้น', act: 'drawer' },
+      { id: 'hide', x: 980, kind: 'hide', name: 'ใต้โต๊ะครู', verb: 'ซ่อน' },
+      { id: 'activity', x: 1150, kind: 'use', name: 'บอร์ดกิจกรรม', verb: 'ดู', act: 'activityBoard' },
     ],
   },
 
@@ -291,16 +299,16 @@ const ROOMS = {
       this.wins = [P.windowFrame(ctx, 780, 110, 110, 140, { bars: true }), P.windowFrame(ctx, 1420, 110, 110, 140, { bars: true }), P.windowFrame(ctx, 2140, 110, 110, 140, { bars: true })];
       for (const x of [500, 1100, 1700, 2250]) P.fluoFixture(ctx, x);
     },
-    dyn(ctx, t) { clockNow(ctx, 1320, 140, 22); rainGlass(ctx, this.wins, t); exitSign(ctx, 150, 120); },
-    lights: (t) => [{ x: 1100, y: 56, r: 300, i: 0.4 * flick(t, 6, 0.6), c: '210,230,210', sy: 0.8 }, { x: 2250, y: 56, r: 260, i: 0.3 * flick(t, 8, 0.7), c: '210,230,210', sy: 0.8 }, { x: 150, y: 130, r: 110, i: f('chase') ? 0.85 : 0.25, c: '80,255,140' }],
+    dyn(ctx, t) { clockNow(ctx, 1320, 140, 22); rainGlass(ctx, this.wins, t); exitSign(ctx, 110, 120); },
+    lights: (t) => [{ x: 1100, y: 56, r: 300, i: 0.4 * flick(t, 6, 0.6), c: '210,230,210', sy: 0.8 }, { x: 2250, y: 56, r: 260, i: 0.3 * flick(t, 8, 0.7), c: '210,230,210', sy: 0.8 }, { x: 110, y: 130, r: 110, i: f('chase') ? 0.85 : 0.25, c: '80,255,140' }],
     right: { to: 'bridge', x: 80 },
     objs: [
-      { id: 'down', x: 160, kind: 'door', name: 'บันไดลงชั้น 1', verb: 'ลงบันได', to: 'hall1', toX: 1990, sfx: 'stairs' },
-      { id: 'lib', x: 600, kind: 'door', name: 'ห้องสมุด', verb: 'เข้าห้อง', to: 'library', toX: 120 },
-      { id: 'music', x: 1000, kind: 'door', name: 'ห้องดนตรี', verb: 'เปิดประตู', lock: 'music' },
-      { id: 'lock', x: 1285, kind: 'hide', name: 'ตู้ล็อกเกอร์', verb: 'ซ่อน' },
-      { id: 'arch', x: 1650, kind: 'door', name: 'ห้องเก็บเอกสาร', verb: 'เปิดประตู', to: 'archive', toX: 120, lock: 'archive', sfx: 'metal' },
-      { id: 'cab', x: 1955, kind: 'hide', name: 'หลังตู้เอกสาร', verb: 'ซ่อน' },
+      { id: 'down', x: 110, kind: 'door', name: 'บันไดลงชั้น 1', verb: 'ลงบันได', to: 'hall1', toX: 2040, sfx: 'stairs' },
+      { id: 'lib', x: 455, kind: 'door', name: 'ห้องสมุด', verb: 'เข้าห้อง', to: 'library', toX: 90 },
+      { id: 'music', x: 955, kind: 'door', name: 'ห้องดนตรี', verb: 'เปิดประตู', lock: 'music' },
+      { id: 'lock', x: 1240, kind: 'hide', name: 'ตู้ล็อกเกอร์', verb: 'ซ่อน' },
+      { id: 'arch', x: 1810, kind: 'door', name: 'ห้องเก็บเอกสาร', verb: 'เปิดประตู', to: 'archive', toX: 90, lock: 'archive', sfx: 'metal' },
+      { id: 'cab', x: 2005, kind: 'hide', name: 'หลังตู้เอกสาร', verb: 'ซ่อน' },
     ],
   },
 
@@ -315,18 +323,18 @@ const ROOMS = {
     },
     dyn(ctx, t) {
       clockNow(ctx, 860, 120, 22);
-      if (G.fx.mirrorTeacher > 0) { ctx.save(); ctx.beginPath(); ctx.rect(1380, 100, 90, 230); ctx.clip(); drawChar(ctx, 'teacher', 1430, 330, { facing: -1, alpha: G.fx.mirrorTeacher, h: 210, tilt: 0.3, hold: 'book' }); ctx.restore(); }
-      if (f('bookFell')) { P.box(ctx, 640, WB + 40, 46, 10, '#5a2a22', '#3a1814'); }
+      if (G.fx.mirrorTeacher > 0) { ctx.save(); ctx.beginPath(); ctx.rect(...LIB_MIRROR); ctx.clip(); drawChar(ctx, 'teacher', LIB_MIRROR[0] + 60, LIB_MIRROR[1] + LIB_MIRROR[3] - 4, { facing: -1, alpha: G.fx.mirrorTeacher, h: 210, tilt: 0.3, hold: 'book' }); ctx.restore(); }
+      if (f('bookFell')) { P.box(ctx, 520, WB + 40, 46, 10, '#5a2a22', '#3a1814'); }
     },
-    lights: (t) => [{ x: 1040, y: 60, r: 260, i: 0.3 * flick(t, 11, 0.5), c: '210,220,200', sy: 0.8 }],
+    lights: (t) => [{ x: 1040, y: 60, r: 260, i: 0.3 * flick(t, 11, 0.5), c: '210,220,200', sy: 0.8 }, { x: LIB_MIRROR[0] + 55, y: 280, r: 170, i: G.fx.mirrorTeacher > 0 ? 0.8 : 0, c: '160,185,210' }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2s', toX: 600 },
-      { id: 'books', x: 350, kind: 'use', name: 'หนังสือเรียนบนชั้น', verb: 'ดู', act: 'books' },
-      { id: 'drown', x: 600, kind: 'use', name: 'หนังสือเล่มหนึ่ง', verb: 'หยิบอ่าน', act: 'drownBook', show: () => !f('drownRead') },
-      { id: 'note', x: 770, kind: 'use', name: 'กระดาษติดผนัง', verb: 'อ่าน', act: 'libNote' },
-      { id: 'reg2', x: 1000, kind: 'use', name: 'สมุดทะเบียน', verb: 'เก็บ', act: 'reg2', show: () => !S().inv.reg2 },
-      { id: 'hide', x: 1120, kind: 'hide', name: 'ใต้โต๊ะอ่านหนังสือ', verb: 'ซ่อน' },
-      { id: 'cab', x: 1300, kind: 'use', name: 'ตู้เหล็กล็อกรหัส', verb: 'ใส่รหัส', act: 'cardCabinet', show: () => !S().inv.card },
+      { id: 'out', x: 90, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2s', toX: 455 },
+      { id: 'books', x: 300, kind: 'use', name: 'หนังสือเรียนบนชั้น', verb: 'ดู', act: 'books' },
+      { id: 'drown', x: 500, kind: 'use', name: 'หนังสือเล่มหนึ่ง', verb: 'หยิบอ่าน', act: 'drownBook', show: () => !f('drownRead') },
+      { id: 'note', x: 690, kind: 'use', name: 'กระดาษติดผนัง', verb: 'อ่าน', act: 'libNote' },
+      { id: 'reg2', x: 820, kind: 'use', name: 'สมุดทะเบียน', verb: 'เก็บ', act: 'reg2', show: () => !S().inv.reg2 },
+      { id: 'hide', x: 920, kind: 'hide', name: 'ใต้โต๊ะอ่านหนังสือ', verb: 'ซ่อน' },
+      { id: 'cab', x: 1210, kind: 'use', name: 'ตู้เหล็กล็อกรหัส', verb: 'ใส่รหัส', act: 'cardCabinet', show: () => !S().inv.card },
     ],
   },
 
@@ -341,9 +349,9 @@ const ROOMS = {
     dyn() {},
     lights: (t) => [{ x: 600, y: 60, r: 280, i: 0.3 * flick(t, 12, 0.3), c: '220,240,230', sy: 0.8 }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 1', verb: 'ออกจากห้อง', to: 'hall1', toX: 1450, lock: 'nurseOut' },
-      { id: 'hide', x: 515, kind: 'hide', name: 'หลังม่าน', verb: 'ซ่อน' },
-      { id: 'cab', x: 960, kind: 'use', name: 'ตู้ยา', verb: 'เปิด', act: 'nurseCabinet' },
+      { id: 'out', x: 90, kind: 'door', name: 'โถงชั้น 1', verb: 'ออกจากห้อง', to: 'hall1', toX: 1640, lock: 'nurseOut' },
+      { id: 'hide', x: 1020, kind: 'hide', name: 'ตู้เหล็ก', verb: 'ซ่อน' },
+      { id: 'cab', x: 880, kind: 'use', name: 'ตู้ยา', verb: 'เปิด', act: 'nurseCabinet' },
     ],
   },
 
@@ -357,12 +365,12 @@ const ROOMS = {
       P.wardrobe(ctx, 1030, { w: 110, h: 240 });
     },
     dyn() {},
-    lights: () => [{ x: 875, y: WB - 70, r: 100, i: f('archPower') ? 0.55 : 0, c: '255,150,90' }, { x: 600, y: 60, r: 220, i: f('archPower') ? 0.35 : 0.08, c: '220,220,200' }],
+    lights: () => [{ x: 850, y: WB - 70, r: 100, i: f('archPower') ? 0.55 : 0, c: '255,150,90' }, { x: 600, y: 60, r: 220, i: f('archPower') ? 0.35 : 0.08, c: '220,220,200' }],
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2s', toX: 1650, sfx: 'metal' },
-      { id: 'files', x: 440, kind: 'use', name: 'ตู้เอกสาร', verb: 'ค้น', act: 'files' },
+      { id: 'out', x: 90, kind: 'door', name: 'โถงชั้น 2', verb: 'ออกจากห้อง', to: 'hall2s', toX: 1810, sfx: 'metal' },
+      { id: 'files', x: 390, kind: 'use', name: 'ตู้เอกสาร', verb: 'ค้น', act: 'files' },
       { id: 'note', x: 710, kind: 'use', name: 'กระดาษบนผนัง', verb: 'อ่าน', act: 'archNote' },
-      { id: 'deck', x: 875, kind: 'use', name: 'เครื่องเล่นเทปหลัก', verb: 'เปิดเทป', act: 'archDeck' },
+      { id: 'deck', x: 850, kind: 'use', name: 'เครื่องเล่นเทปหลัก', verb: 'เปิดเทป', act: 'archDeck' },
       { id: 'hide', x: 1085, kind: 'hide', name: 'ตู้เหล็ก', verb: 'ซ่อน' },
     ],
   },
@@ -380,8 +388,8 @@ const ROOMS = {
     lights: (t) => [{ x: 1300, y: 60, r: 220, i: 0.25 * flick(t, 13, 0.4), c: '230,200,160' }],
     left: { to: 'hall2s', x: 2320 },
     objs: [
-      { id: 'ctrl', x: 600, kind: 'door', name: 'ห้องควบคุมไฟ', verb: 'เข้าห้อง', to: 'control', toX: 120, sfx: 'metal' },
-      { id: 'pa', x: 1300, kind: 'door', name: 'ห้องประชาสัมพันธ์', verb: 'เข้าห้อง', to: 'pa_room', toX: 120, lock: 'paDoor' },
+      { id: 'ctrl', x: 535, kind: 'door', name: 'ห้องควบคุมไฟ', verb: 'เข้าห้อง', to: 'control', toX: 110, sfx: 'metal' },
+      { id: 'pa', x: 1255, kind: 'door', name: 'ห้องประชาสัมพันธ์', verb: 'เข้าห้อง', to: 'pa_room', toX: 90, lock: 'paDoor' },
     ],
   },
 
@@ -394,14 +402,14 @@ const ROOMS = {
     },
     dyn(ctx) {
       const sw = S().flags.sw || {};
-      [1, 2, 3, 4].forEach((n, i) => { ctx.fillStyle = sw[n] ? '#7dff9a' : '#40201a'; ctx.fillRect(448, 172 + i * 42, 16, 8); });
+      [1, 2, 3, 4].forEach((n, i) => { ctx.fillStyle = sw[n] ? '#7dff9a' : '#40201a'; if (this.painted) ctx.fillRect(272 + i * 51, 300, 12, 6); else ctx.fillRect(448, 172 + i * 42, 16, 8); });
     },
-    lights: () => { const sw = S().flags.sw || {}; return [{ x: 495, y: 240, r: 140, i: Object.values(sw).some(Boolean) ? 0.45 : 0.1, c: '150,255,170' }]; },
+    lights: () => { const sw = S().flags.sw || {}; return [{ x: 355, y: 260, r: 140, i: Object.values(sw).some(Boolean) ? 0.45 : 0.1, c: '150,255,170' }]; },
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'ทางเชื่อม', verb: 'ออกจากห้อง', to: 'bridge', toX: 600, sfx: 'metal' },
-      { id: 'breaker', x: 495, kind: 'use', name: 'ตู้ควบคุมไฟ', verb: 'เปิดตู้', act: 'breaker' },
-      { id: 'fuse', x: 700, kind: 'use', name: 'ชั้นอะไหล่', verb: 'ค้น', act: 'fuseShelf', show: () => !S().inv.fuse && !f('fuseIn') },
-      { id: 'hide', x: 835, kind: 'hide', name: 'ตู้เหล็ก', verb: 'ซ่อน' },
+      { id: 'out', x: 110, kind: 'door', name: 'ทางเชื่อม', verb: 'ออกจากห้อง', to: 'bridge', toX: 535, sfx: 'metal' },
+      { id: 'breaker', x: 355, kind: 'use', name: 'ตู้ควบคุมไฟ', verb: 'เปิดตู้', act: 'breaker' },
+      { id: 'fuse', x: 600, kind: 'use', name: 'ชั้นอะไหล่', verb: 'ค้น', act: 'fuseShelf', show: () => !S().inv.fuse && !f('fuseIn') },
+      { id: 'hide', x: 800, kind: 'hide', name: 'ตู้เหล็ก', verb: 'ซ่อน' },
     ],
   },
 
@@ -414,25 +422,27 @@ const ROOMS = {
       P.wiringPanel(ctx, 900); P.hornSpeaker(ctx, 620, 70, -1, 0.7); P.hornSpeaker(ctx, 680, 70, 1, 0.7);
     },
     dyn(ctx, t) {
-      clockNow(ctx, 470, 120, 20);
+      clockNow(ctx, 560, 115, 18);
+      const [mx, my, mw, mh] = PA_MIRROR;
       if (G.fx.mirrorNameless > 0 || G.fx.mirrorKids > 0) {
-        ctx.save(); ctx.beginPath(); ctx.rect(260, 100, 110, 240); ctx.clip();
-        for (let i = 0; i < G.fx.mirrorKids; i++) drawChar(ctx, 'kid', 272 + i * 16, 345 - (i % 2) * 6, { h: 80, alpha: 0.7, rim: false });
-        if (G.fx.mirrorNameless > 0) drawChar(ctx, 'nameless', 315, 350, { alpha: G.fx.mirrorNameless, t, h: 230 });
+        ctx.save(); ctx.beginPath(); ctx.rect(mx, my, mw, mh); ctx.clip();
+        for (let i = 0; i < G.fx.mirrorKids; i++) drawChar(ctx, 'kid', mx + 12 + i * 16, my + mh - 4 - (i % 2) * 6, { h: 80, alpha: 0.7, rim: false });
+        if (G.fx.mirrorNameless > 0) drawChar(ctx, 'nameless', mx + mw / 2, my + mh + 6, { alpha: G.fx.mirrorNameless, t, h: 200 });
         ctx.restore();
       }
       const pa = S().flags.pa || {};
       const lamp = (x, y, on) => { ctx.fillStyle = on ? '#ffcf6a' : '#3a2416'; ctx.beginPath(); ctx.arc(x, y, 5, 0, 7); ctx.fill(); };
-      lamp(1070, 146, pa.mic); lamp(1070, 186, pa.tape); lamp(1070, 236, pa.mixer); lamp(1070, 276, pa.amp); lamp(1070, 316, pa.school && pa.village);
+      if (this.painted) [pa.mic, pa.tape, pa.mixer, pa.amp, pa.school && pa.village].forEach((on, i) => lamp(1004 + i * 40, 190, on));
+      else { lamp(1070, 146, pa.mic); lamp(1070, 186, pa.tape); lamp(1070, 236, pa.mixer); lamp(1070, 276, pa.amp); lamp(1070, 316, pa.school && pa.village); }
     },
-    lights: (t) => { const pa = S().flags.pa || {}; return [{ x: 620, y: WB - 90, r: 180, i: f('paPower') ? 0.55 : 0.12, c: '255,170,90' }, { x: 1000, y: 230, r: 140, i: f('paPower') ? 0.4 : 0.05, c: '255,210,120' }, { x: 600, y: 50, r: 320, i: f('dawn') ? 1 : 0.15 * flick(t, 15, 0.6), c: f('dawn') ? '255,190,120' : '220,220,200' }]; },
+    lights: (t) => { const pa = S().flags.pa || {}; return [{ x: PA_MIRROR[0] + 55, y: 240, r: 170, i: (G.fx.mirrorNameless > 0 || G.fx.mirrorKids > 0) ? 0.75 : 0, c: '160,185,210' }, { x: 560, y: WB - 90, r: 180, i: f('paPower') ? 0.55 : 0.12, c: '255,170,90' }, { x: 1080, y: 230, r: 140, i: f('paPower') ? 0.4 : 0.05, c: '255,210,120' }, { x: 600, y: 50, r: 320, i: f('dawn') ? 1 : 0.15 * flick(t, 15, 0.6), c: f('dawn') ? '255,190,120' : '220,220,200' }]; },
     objs: [
-      { id: 'out', x: 120, kind: 'door', name: 'ทางเชื่อม', verb: 'ออกจากห้อง', to: 'bridge', toX: 1300, lock: 'paOut' },
-      { id: 'mirror', x: 315, kind: 'use', name: 'กระจกเงา', verb: 'มอง', act: 'paMirror' },
-      { id: 'note', x: 520, kind: 'use', name: 'ข้อความของแม่', verb: 'อ่าน', act: 'momNote2', show: () => f('paArrived') },
-      { id: 'mic', x: 640, kind: 'use', name: 'ไมโครโฟน', verb: 'เริ่มประกาศ', act: 'mic' },
-      { id: 'tape', x: 755, kind: 'use', name: 'เครื่องเล่นเทป', verb: 'ดู', act: 'paTape' },
-      { id: 'wire', x: 1000, kind: 'use', name: 'แผงเดินสัญญาณ', verb: 'ต่อสาย', act: 'wiring' },
+      { id: 'out', x: 90, kind: 'door', name: 'ทางเชื่อม', verb: 'ออกจากห้อง', to: 'bridge', toX: 1255, lock: 'paOut' },
+      { id: 'mirror', x: 260, kind: 'use', name: 'กระจกเงา', verb: 'มอง', act: 'paMirror' },
+      { id: 'note', x: 420, kind: 'use', name: 'ข้อความของแม่', verb: 'อ่าน', act: 'momNote2', show: () => f('paArrived') },
+      { id: 'mic', x: 590, kind: 'use', name: 'ไมโครโฟน', verb: 'เริ่มประกาศ', act: 'mic' },
+      { id: 'tape', x: 500, kind: 'use', name: 'เครื่องเล่นเทป', verb: 'ดู', act: 'paTape' },
+      { id: 'wire', x: 1080, kind: 'use', name: 'แผงเดินสัญญาณ', verb: 'ต่อสาย', act: 'wiring' },
     ],
   },
 
@@ -458,7 +468,12 @@ const ROOMS = {
       for (let i = 0; i < 40; i++) { ctx.fillStyle = `rgba(255,${200 + R(0, 50)},120,${R(0.3, 0.8)})`; ctx.fillRect(win[0] + R(0, 200), win[1] + R(80, 180), 3, 3); }
       P.table(ctx, 420, { w: 180, h: 76 }); P.tapeDeck(ctx, 450, WB - 82); P.mirrorFrame(ctx, 700, 110, 110, 230);
     },
-    dyn(ctx, t) { if (G.fx.mirrorGirl > 0) { ctx.save(); ctx.beginPath(); ctx.rect(700, 110, 110, 230); ctx.clip(); drawChar(ctx, 'girl', 790, 352, { h: 100, alpha: G.fx.mirrorGirl, rim: false }); ctx.restore(); } },
+    dyn(ctx, t) {
+      if (G.fx.mirrorGirl <= 0) return;
+      // painted flat: she stands by the hallway door behind him; procedural: reflected in the mirror
+      if (this.painted) { drawChar(ctx, 'girl', 830, FLOOR - 6, { h: 108, alpha: G.fx.mirrorGirl * 0.75, facing: -1, rim: false }); return; }
+      ctx.save(); ctx.beginPath(); ctx.rect(700, 110, 110, 230); ctx.clip(); drawChar(ctx, 'girl', 790, 352, { h: 100, alpha: G.fx.mirrorGirl, rim: false }); ctx.restore();
+    },
     lights: () => [{ x: 520, y: 60, r: 340, i: 0.6, c: '255,220,170' }],
     objs: [],
   },

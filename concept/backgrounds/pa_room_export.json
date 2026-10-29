@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\pa_room_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-31866bf2-2347-4105-8e58-6e81cbf776a4.png",
+  "source_size": [
+    1870,
+    841
+  ],
+  "size": [
+    2400,
+    1080
+  ],
+  "files": [
+    "pa_room_1.jpg",
+    "pa_room_2.jpg"
+  ],
+  "unused_right_padding": 1440,
+  "floor_y": null,
+  "align_floor": 0.615
+}

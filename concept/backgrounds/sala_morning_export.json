@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\sala_morning_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-5363b864-30a8-4fb8-b4e7-c43751cb3fe8.png",
+  "source_size": [
+    2172,
+    724
+  ],
+  "size": [
+    3600,
+    1080
+  ],
+  "files": [
+    "sala_morning_1.jpg",
+    "sala_morning_2.jpg"
+  ],
+  "unused_right_padding": 240,
+  "floor_y": 550,
+  "align_floor": null
+}

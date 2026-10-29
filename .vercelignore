@@ -5,3 +5,5 @@ evenlabs_api_key.txt
 .claude/
 tools/
 *.md
+concept/
+ART_PROMPTS_V2_FULL.md

@@ -1,0 +1,18 @@
+{
+  "master": "concept\\backgrounds\\city_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-8d4bbd75-3bbe-4e9d-a38e-c75ee6be1349.png",
+  "source_size": [
+    1672,
+    941
+  ],
+  "size": [
+    1920,
+    1080
+  ],
+  "files": [
+    "city_1.jpg"
+  ],
+  "unused_right_padding": 0,
+  "floor_y": null,
+  "align_floor": 0.734
+}

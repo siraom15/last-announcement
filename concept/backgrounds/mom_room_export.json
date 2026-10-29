@@ -1,0 +1,19 @@
+{
+  "master": "concept\\backgrounds\\mom_room_master.png",
+  "source": "C:\\Users\\sirao\\.codex\\generated_images\\01a183e0-916a-79f1-a12b-cc98630f2f23\\exec-45d5f277-6230-4f2e-bc61-bb6c73312bb6.png",
+  "source_size": [
+    1705,
+    922
+  ],
+  "size": [
+    2000,
+    1080
+  ],
+  "files": [
+    "mom_room_1.jpg",
+    "mom_room_2.jpg"
+  ],
+  "unused_right_padding": 1840,
+  "floor_y": null,
+  "align_floor": 0.738
+}
