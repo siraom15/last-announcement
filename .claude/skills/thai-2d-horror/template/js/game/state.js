@@ -7,7 +7,7 @@ export function freshState() {
   return {
     part: 1,
     room: 'road',
-    x: 330,
+    x: 700,
     facing: 1,
     flags: {},
     inv: {},

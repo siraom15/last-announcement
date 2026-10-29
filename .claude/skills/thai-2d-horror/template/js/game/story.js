@@ -419,11 +419,11 @@ export async function opening() {
     sfx('static', { dur: 2, gain: 0.6 }); await wait(2200);
     await say('OP_D1'); await say('OP_P2', { hold: 600 });
     // headlights catch a girl standing in the road for 0.8s
-    G.camTarget = 100; const girl = actor({ kind: 'daow', room: 'road', x: 760, facing: -1 });
+    G.camTarget = 100; const girl = actor({ kind: 'daow', room: 'road', x: 920, facing: -1 });
     await fadeTo(0, 250); await wait(800);
     G.fx.fade = 1; unactor(girl); sfx('brake', { gain: 1 }); await wait(1300); sfx('thump');
     set('headlights', false); set('handprint'); Audio.setAmbience(G.room.amb);
-    await wait(500); P().hidden = false; P().x = 330; G.camTarget = null;
+    await wait(500); P().hidden = false; P().x = 700; P().facing = -1; G.camTarget = null;
     await fadeTo(0, 1600); UI.hud(true);
     await say('CAR_P1');
     objective('ค้นของในรถ'); cp('CP01');
@@ -731,7 +731,7 @@ async function endingB(fake) {
   G.fx.flash = 1; tween(G.fx, 'flash', 0, 600); unactor(fake);
   tween(G.fx, 'water', 0, 1500); await wait(1500); await fadeTo(1, 800);
   G.enterRoom('hall1', 1500, -1, true);
-  const r = actor({ kind: 'ratree', room: 'hall1', x: 860, facing: 1, h: 190, hold: 'book', alpha: 0.8 });
+  const r = actor({ kind: 'ratree', room: 'hall1', x: 860, facing: 1, h: 168, hold: 'book', alpha: 0.8 });
   await fadeTo(0, 500); await P().walkTo(140); await fadeTo(1, 800); unactor(r);
   await UI.titleCard('สามเดือนต่อมา', '', 2500);
   G.enterRoom('city', 380, 1, true); G.fx.water = 0; await fadeTo(0, 1500);
@@ -748,7 +748,7 @@ async function endingC(fake) {
   await say('EC_3'); fake.jitter = 8; G.fx.noise = 1; await say('EC_4');
   await tween(fake, 'alpha', 0, 1500); unactor(fake); G.fx.noise = 0;
   tween(G.fx, 'water', 0, 3000); set('dawn'); await tween(G.fx, 'dawn', 1, 3000);
-  const r = actor({ kind: 'ratree', room: 'pa_room', x: 330, facing: 1, h: 180, hold: 'book', alpha: 0, rim: true });
+  const r = actor({ kind: 'ratree', room: 'pa_room', x: 330, facing: 1, h: 168, hold: 'book', alpha: 0, rim: true });
   await tween(r, 'alpha', 1, 1200);
   await say('EC_5'); await say('EC_6'); sfx('paper', { gain: 1.4 });
   await tween(r, 'alpha', 0, 1200); unactor(r);

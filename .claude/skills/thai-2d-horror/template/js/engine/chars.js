@@ -3,6 +3,9 @@
 import { Sprites } from './sprites.js';
 
 const INK = '#0d0b09';
+// Standing heights in world units before CHAR_SCALE (adult ≈ 1.72 m).
+const BASE_H = { man: 170, girl: 116, teacher: 236, nameless: 270, kid: 112, ratree: 180 };
+export const CHAR_SCALE = { v: 1.3 }; // fitted to the painted rooms: an adult's head reaches the top of a door leaf
 const PAL = {
   man: { skin: '#b98a6b', skinS: '#8a6149', hair: '#16130f', hairH: '#3a332b', top: '#4a5038', topS: '#30351f', inner: '#8d8c86', leg: '#2b3140', legS: '#1c2029', shoe: '#1a1714' },
   girl: { skin: '#d6a98a', skinS: '#a87a5e', hair: '#111015', hairH: '#3a3848', top: '#ece8dc', topS: '#b4ae9c', skirt: '#232c4c', skirtS: '#161c33', sock: '#f2f0ea', shoe: '#111' },
@@ -167,7 +170,8 @@ function figure(ctx, type, h, o, P) {
 
 // Draw a character standing with feet at (x, y). Returns hand position in world space (for the flashlight).
 export function drawChar(ctx, type, x, y, o = {}) {
-  const h = o.h || { man: 170, girl: 116, teacher: 236, nameless: 270, kid: 112, ratree: 180 }[type];
+  // world scale for everyone standing in a room; reflections/window silhouettes pass noScale (sized to their frame)
+  const h = (o.h || BASE_H[type]) * (o.noScale ? 1 : CHAR_SCALE.v);
   ctx.save(); ctx.globalAlpha = o.alpha ?? 1; ctx.translate(x, y);
   if (o.jitter) ctx.translate((Math.random() - 0.5) * o.jitter, (Math.random() - 0.5) * o.jitter * 0.4);
   ctx.scale(o.facing || 1, 1); ctx.lineCap = 'round'; ctx.lineJoin = 'round';

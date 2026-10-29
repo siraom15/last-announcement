@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>rigref</title><body style="margin:0;background:#3b3f47"><canvas id="c" width="900" height="760"></canvas>
+<script type="module">
+// Compares the Pakin rig (idle) with the reference full-body sprite at the same height.
+import { loadRig, rigReady, drawRig } from '../js/engine/rig.js';
+loadRig();
+const x = document.getElementById('c').getContext('2d'), H = 640, FY = 700;
+const src = new Image(); src.src = '../assets/sprites/pakin/full.png'; await src.decode();
+// trim the reference's transparent margins so feet and hair line up with the rig
+const t = document.createElement('canvas'); t.width = src.width; t.height = src.height; const tx = t.getContext('2d'); tx.drawImage(src, 0, 0);
+const d = tx.getImageData(0, 0, t.width, t.height).data; let y0 = t.height, y1 = 0, x0 = t.width, x1 = 0;
+for (let y = 0; y < t.height; y++) for (let i = 0; i < t.width; i++) if (d[(y * t.width + i) * 4 + 3] > 20) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); x0 = Math.min(x0, i); x1 = Math.max(x1, i); }
+const ref = document.createElement('canvas'); ref.width = x1 - x0 + 1; ref.height = y1 - y0 + 1; ref.getContext('2d').drawImage(t, -x0, -y0);
+function frame() {
+  x.fillStyle = '#3b3f47'; x.fillRect(0, 0, 900, 760);
+  const w = ref.width * H / ref.height;
+  // left: reference, middle: rig, right: rig over a 50% reference
+  x.drawImage(ref, 150 - w / 2, FY - H, w, H);
+  if (rigReady()) {
+    x.save(); x.translate(450, FY); drawRig(x, H, { rim: false }); x.restore();
+    x.globalAlpha = 0.5; x.drawImage(ref, 750 - w / 2, FY - H, w, H); x.globalAlpha = 1;
+    x.save(); x.translate(750, FY); x.globalAlpha = 0.6; drawRig(x, H, { rim: false }); x.restore(); x.globalAlpha = 1;
+  }
+  x.strokeStyle = 'rgba(255,255,0,.5)';
+  for (let f = 0; f <= 1.0001; f += 0.1) { const y = FY - H * f; x.beginPath(); x.moveTo(0, y); x.lineTo(900, y); x.stroke(); x.fillStyle = '#ff0'; x.fillText((f * 100).toFixed(0) + '%', 4, y - 2); }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>

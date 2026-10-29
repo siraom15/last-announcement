@@ -45,6 +45,7 @@ export function kidsInRoom(ctx, t) {
 }
 
 // Fixtures as they sit in the painted backgrounds (world units: 1 unit = 2 px of the 1920×1080 panels)
+const CAR_SCALE = 1.45; // procedural car → matches CHAR_SCALE characters
 const GATE_WINDOWS = [46, 225, 404, 590, 768, 947].map((x) => [x, 100, 130, 78]);
 const LIB_MIRROR = [1315, 170, 110, 220];
 const PA_MIRROR = [205, 148, 110, 183];
@@ -62,13 +63,15 @@ const ROOMS = {
     },
     fg(ctx) { if (!this.painted) P.fallenTree(ctx, 660); },
     dyn(ctx, t) {
-      if (this.painted) P.car(ctx, 120, { lights: true });
+      // the car is drawn live over the painted road, scaled to match the characters (pivot: rear wheel on the ground)
+      ctx.save(); if (this.painted) { ctx.translate(120, 470); ctx.scale(CAR_SCALE, CAR_SCALE); ctx.translate(-120, -470); P.car(ctx, 120, { lights: true }); }
       if (f('handprint')) { ctx.fillStyle = 'rgba(200,210,220,.25)'; for (const [dx, dy] of [[0, 0], [7, -9], [13, -11], [19, -9], [24, -3]]) { ctx.beginPath(); ctx.ellipse(270 + dx, 364 + dy, 2.5, 6, 0, 0, 7); ctx.fill(); } ctx.beginPath(); ctx.ellipse(282, 378, 10, 9, 0, 0, 7); ctx.fill(); }
+      ctx.restore();
     },
-    lights: () => [{ x: 470, y: 420, r: f('headlights') ? 520 : 140, i: f('headlights') ? 0.95 : 0.35, c: '255,240,200', sy: 0.5 }],
+    lights: () => [{ x: 650, y: 420, r: f('headlights') ? 560 : 150, i: f('headlights') ? 0.95 : 0.35, c: '255,240,200', sy: 0.5 }],
     left: { block: 'ROAD_BACKBLOCK' }, right: { to: 'sala', x: 80 },
     objs: [
-      { id: 'car', x: 300, kind: 'use', name: 'รถ', verb: 'ค้นในรถ', act: 'searchCar' },
+      { id: 'car', x: 520, kind: 'use', name: 'รถ', verb: 'ค้นในรถ', act: 'searchCar' },
       { id: 'tree', x: 640, kind: 'use', name: 'ต้นไม้ล้ม', verb: 'ดู', act: 'lookTree', show: () => !f('treeSeen') },
       { id: 'sign', x: 1130, kind: 'use', name: 'ป้ายหมู่บ้าน', verb: 'อ่าน', act: 'villageSign' },
     ],
@@ -224,7 +227,7 @@ const ROOMS = {
       P.nightSky(ctx, w); this.wins = P.schoolFacade(ctx, 160, 1340); P.floorRoad(ctx, w); P.gate(ctx, 1100);
     },
     dyn(ctx, t) {
-      if (G.fx.kids > 0) for (const [x, y, ww, hh] of (this.painted ? GATE_WINDOWS : this.wins)) { ctx.save(); ctx.globalAlpha = G.fx.kids; drawChar(ctx, 'kid', x + ww / 2, y + hh + 2, { h: 70, rim: false, alpha: 0.9 }); ctx.restore(); }
+      if (G.fx.kids > 0) for (const [x, y, ww, hh] of (this.painted ? GATE_WINDOWS : this.wins)) { ctx.save(); ctx.globalAlpha = G.fx.kids; drawChar(ctx, 'kid', x + ww / 2, y + hh + 2, { h: 70, rim: false, alpha: 0.9, noScale: true }); ctx.restore(); }
     },
     lights: (t) => [{ x: 1225, y: 150, r: 200, i: 0.3 * flick(t, 9, 0.3), c: '200,210,180' }],
     left: { to: 'street', x: 1420 },
@@ -323,7 +326,7 @@ const ROOMS = {
     },
     dyn(ctx, t) {
       clockNow(ctx, 860, 120, 22);
-      if (G.fx.mirrorTeacher > 0) { ctx.save(); ctx.beginPath(); ctx.rect(...LIB_MIRROR); ctx.clip(); drawChar(ctx, 'teacher', LIB_MIRROR[0] + 60, LIB_MIRROR[1] + LIB_MIRROR[3] - 4, { facing: -1, alpha: G.fx.mirrorTeacher, h: 210, tilt: 0.3, hold: 'book' }); ctx.restore(); }
+      if (G.fx.mirrorTeacher > 0) { ctx.save(); ctx.beginPath(); ctx.rect(...LIB_MIRROR); ctx.clip(); drawChar(ctx, 'teacher', LIB_MIRROR[0] + 60, LIB_MIRROR[1] + LIB_MIRROR[3] - 4, { facing: -1, alpha: G.fx.mirrorTeacher, h: 210, tilt: 0.3, hold: 'book', noScale: true }); ctx.restore(); }
       if (f('bookFell')) { P.box(ctx, 520, WB + 40, 46, 10, '#5a2a22', '#3a1814'); }
     },
     lights: (t) => [{ x: 1040, y: 60, r: 260, i: 0.3 * flick(t, 11, 0.5), c: '210,220,200', sy: 0.8 }, { x: LIB_MIRROR[0] + 55, y: 280, r: 170, i: G.fx.mirrorTeacher > 0 ? 0.8 : 0, c: '160,185,210' }],
@@ -426,8 +429,8 @@ const ROOMS = {
       const [mx, my, mw, mh] = PA_MIRROR;
       if (G.fx.mirrorNameless > 0 || G.fx.mirrorKids > 0) {
         ctx.save(); ctx.beginPath(); ctx.rect(mx, my, mw, mh); ctx.clip();
-        for (let i = 0; i < G.fx.mirrorKids; i++) drawChar(ctx, 'kid', mx + 12 + i * 16, my + mh - 4 - (i % 2) * 6, { h: 80, alpha: 0.7, rim: false });
-        if (G.fx.mirrorNameless > 0) drawChar(ctx, 'nameless', mx + mw / 2, my + mh + 6, { alpha: G.fx.mirrorNameless, t, h: 200 });
+        for (let i = 0; i < G.fx.mirrorKids; i++) drawChar(ctx, 'kid', mx + 12 + i * 16, my + mh - 4 - (i % 2) * 6, { h: 80, alpha: 0.7, rim: false, noScale: true });
+        if (G.fx.mirrorNameless > 0) drawChar(ctx, 'nameless', mx + mw / 2, my + mh + 6, { alpha: G.fx.mirrorNameless, t, h: 200, noScale: true });
         ctx.restore();
       }
       const pa = S().flags.pa || {};
@@ -472,7 +475,7 @@ const ROOMS = {
       if (G.fx.mirrorGirl <= 0) return;
       // painted flat: she stands by the hallway door behind him; procedural: reflected in the mirror
       if (this.painted) { drawChar(ctx, 'girl', 830, FLOOR - 6, { h: 108, alpha: G.fx.mirrorGirl * 0.75, facing: -1, rim: false }); return; }
-      ctx.save(); ctx.beginPath(); ctx.rect(700, 110, 110, 230); ctx.clip(); drawChar(ctx, 'girl', 790, 352, { h: 100, alpha: G.fx.mirrorGirl, rim: false }); ctx.restore();
+      ctx.save(); ctx.beginPath(); ctx.rect(700, 110, 110, 230); ctx.clip(); drawChar(ctx, 'girl', 790, 352, { h: 100, alpha: G.fx.mirrorGirl, rim: false, noScale: true }); ctx.restore();
     },
     lights: () => [{ x: 520, y: 60, r: 340, i: 0.6, c: '255,220,170' }],
     objs: [],

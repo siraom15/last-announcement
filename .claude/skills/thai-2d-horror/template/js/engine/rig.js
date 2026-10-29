@@ -6,7 +6,7 @@
 const SHEET = new URL('../../assets/sprites/pakin/parts.png', import.meta.url).href;
 // [x, y, w, h] of each piece on the sheet, and its joints in piece-local pixels
 const PARTS = {
-  head: { box: [106, 89, 224, 271], neck: [96, 256] },
+  head: { box: [106, 89, 224, 271], neck: [96, 256], scale: 0.8 }, // drawn larger than the body on the sheet
   torso: { box: [471, 12, 273, 405], neck: [124, 20], shoulder: [126, 66], hipF: [146, 328], hipB: [128, 326] },
   arm: { box: [1219, 56, 125, 379], shoulder: [60, 24], hand: [80, 342] },
   thighF: { box: [862, 455, 136, 330], top: [70, 14], knee: [66, 314] },
@@ -15,7 +15,7 @@ const PARTS = {
   shinB: { box: [520, 795, 200, 273], knee: [64, 12], sole: 273, scale: 1.2 },
   light: { box: [863, 908, 141, 59], grip: [34, 30], lens: [140, 28] },
 };
-const HEIGHT_PX = 1180; // standing height in sheet pixels (hair top to soles)
+const HEIGHT_PX = 1108; // standing height in sheet pixels (hair top to soles), measured on tools/rigref.html
 
 let rig = null;
 
@@ -95,7 +95,7 @@ export function drawRig(ctx, h, o) {
     const T = R.torso, hx = T.hipF[0], hy = T.hipF[1];
     ctx.drawImage(b('torso'), -hx, -hy + P.breathe * 0.3);
     const neck = [T.neck[0] - hx, T.neck[1] - hy + P.breathe * 0.3], sh = [T.shoulder[0] - hx, T.shoulder[1] - hy + P.breathe * 0.4];
-    part(R.head, b('head'), neck[0], neck[1], ...R.head.neck, -P.lean * 0.6 + (o.lightOn ? -0.05 : 0));
+    part(R.head, b('head'), neck[0], neck[1] + 6, ...R.head.neck, -P.lean * 0.6 + (o.lightOn ? -0.05 : 0), R.head.scale);
     // flashlight sits in the hand, drawn just under the arm so the fingers wrap it
     const A = R.arm, hand = rot(A.hand[0] - A.shoulder[0], A.hand[1] - A.shoulder[1], P.arm);
     const handAt = [sh[0] + hand[0], sh[1] + hand[1]];
