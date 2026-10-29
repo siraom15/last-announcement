@@ -45,7 +45,35 @@ export function kidsInRoom(ctx, t) {
 }
 
 // Fixtures as they sit in the painted backgrounds (world units: 1 unit = 2 px of the 1920×1080 panels)
-const CAR_SCALE = 1.45; // procedural car → matches CHAR_SCALE characters
+const CAR_SCALE = 1.45; // procedural fallback car → matches CHAR_SCALE characters
+
+// Painted car prop (assets/props/car_handprint.png). Measured on the 1983×793 source:
+// body box, tire contact row, headlamp, and the front-door glass that carries the handprint.
+const CAR = {
+  src: 'assets/props/car_handprint.png', box: [27, 123, 1957, 764], lamp: [1905, 465],
+  print: [1000, 176, 230, 176], clean: [700, 176],      // handprint glass, and the rear glass used to hide it
+  x: 40, ground: 436, len: 560,                          // world: rear bumper x, tire line, bumper-to-bumper length (≈4.4 m)
+  img: null, plain: null,
+};
+function carImages() {
+  if (CAR.img === null) {
+    CAR.img = false;
+    const im = new Image();
+    im.onload = () => {
+      const [x0, y0, x1, y1] = CAR.box, w = x1 - x0, h = y1 - y0;
+      const cut = () => { const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(im, -x0, -y0); return c; };
+      const withPrint = cut(), plain = cut(), g = plain.getContext('2d');
+      // before the brake scare the driver's window is clean: paint rear-window glass over the handprint
+      const [px, py, pw, ph] = CAR.print, [cx, cy] = CAR.clean;
+      g.drawImage(im, cx, cy, pw, ph, px - x0, py - y0, pw, ph);
+      CAR.img = withPrint; CAR.plain = plain;
+    };
+    im.src = CAR.src;
+  }
+  return CAR.img ? CAR : null;
+}
+const carK = () => CAR.len / (CAR.box[2] - CAR.box[0]);
+const carLamp = () => [CAR.x + (CAR.lamp[0] - CAR.box[0]) * carK(), CAR.ground - (CAR.box[3] - CAR.lamp[1]) * carK()];
 const GATE_WINDOWS = [46, 225, 404, 590, 768, 947].map((x) => [x, 100, 130, 78]);
 const LIB_MIRROR = [1315, 170, 110, 220];
 const PA_MIRROR = [205, 148, 110, 183];
@@ -63,15 +91,23 @@ const ROOMS = {
     },
     fg(ctx) { if (!this.painted) P.fallenTree(ctx, 660); },
     dyn(ctx, t) {
-      // the car is drawn live over the painted road, scaled to match the characters (pivot: rear wheel on the ground)
+      // painted car prop: tires on the road line, sized to the characters; handprint shows after the brake scare
+      const car = this.painted && carImages();
+      if (car) {
+        const w = CAR.len, h = (CAR.box[3] - CAR.box[1]) * carK();
+        ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.beginPath(); ctx.ellipse(CAR.x + w / 2, CAR.ground + 2, w * 0.5, 9, 0, 0, 7); ctx.fill();
+        ctx.drawImage(f('handprint') ? car.img : car.plain, CAR.x, CAR.ground - h, w, h);
+        return;
+      }
+      // procedural fallback car (pivot: rear wheel on the ground)
       ctx.save(); if (this.painted) { ctx.translate(120, 470); ctx.scale(CAR_SCALE, CAR_SCALE); ctx.translate(-120, -470); P.car(ctx, 120, { lights: true }); }
       if (f('handprint')) { ctx.fillStyle = 'rgba(200,210,220,.25)'; for (const [dx, dy] of [[0, 0], [7, -9], [13, -11], [19, -9], [24, -3]]) { ctx.beginPath(); ctx.ellipse(270 + dx, 364 + dy, 2.5, 6, 0, 0, 7); ctx.fill(); } ctx.beginPath(); ctx.ellipse(282, 378, 10, 9, 0, 0, 7); ctx.fill(); }
       ctx.restore();
     },
-    lights: () => [{ x: 650, y: 420, r: f('headlights') ? 560 : 150, i: f('headlights') ? 0.95 : 0.35, c: '255,240,200', sy: 0.5 }],
+    lights() { const [lx, ly] = this.painted && CAR.img ? carLamp() : [650, 420]; return [{ x: lx + 40, y: ly + 20, r: f('headlights') ? 560 : 150, i: f('headlights') ? 0.95 : 0.35, c: '255,240,200', sy: 0.5 }]; },
     left: { block: 'ROAD_BACKBLOCK' }, right: { to: 'sala', x: 80 },
     objs: [
-      { id: 'car', x: 520, kind: 'use', name: 'รถ', verb: 'ค้นในรถ', act: 'searchCar' },
+      { id: 'car', x: 400, kind: 'use', name: 'รถ', verb: 'ค้นในรถ', act: 'searchCar' }, // driver's door
       { id: 'tree', x: 640, kind: 'use', name: 'ต้นไม้ล้ม', verb: 'ดู', act: 'lookTree', show: () => !f('treeSeen') },
       { id: 'sign', x: 1130, kind: 'use', name: 'ป้ายหมู่บ้าน', verb: 'อ่าน', act: 'villageSign' },
     ],
